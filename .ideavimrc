@@ -1,0 +1,86 @@
+""" Map leader to space ---------------------
+let mapleader=" "
+
+""" Plugins  --------------------------------
+Plug 'preservim/nerdtree`
+set NERDTree
+
+""" Common settings -------------------------
+set incsearch
+set ignorecase
+set smartcase
+set clipboard+=unnamedplus
+set clipboard+=ideaput
+
+""" Idea specific settings ------------------
+set ideajoin
+""" set ideastatusicon=gray
+set idearefactormode=keep
+
+""" Mappings --------------------------------
+nnoremap <esc> <nop>
+nnoremap <leader>rc :action IdeaVim.ReloadVimRc.reload<CR>
+nnoremap j gj
+nnoremap k gk
+
+
+
+nnoremap gd :action GotoDeclaration<CR>
+nnoremap gs :action GotoSuperMethod<CR>
+nnoremap gi :action GotoImplementation<CR>
+nnoremap <leader>rn :action RenameElement<CR>
+nnoremap ga :action ShowIntentionActions<CR>
+nnoremap gu :action ShowUsages<CR>
+nnoremap gn :action GotoNextError<CR>
+nnoremap gp :action GotoPreviousError<CR>
+
+nnoremap <TAB> :action NextTab<CR>
+nnoremap <s-TAB> :action PreviousTab<CR>
+nnoremap <C-TAB> :action MoveEditorToOppositeTabGroup<CR>
+nnoremap <C-A-h> :action PreviousTab<CR>
+nnoremap <C-A-l> :action NextTab<CR>
+nnoremap <C-A-f> :action ReformatCode<CR>
+nnoremap <C-/> :action CommentByLineComment<CR>
+vnoremap <C-/> :action CommentByLineComment<CR>
+nnoremap <C-A-/> :action CommentByBlockComment<CR>
+vnoremap <C-A-/> :action CommentByBlockComment<CR>
+nnoremap <C-A-j> :action ActivateTerminalToolWindow<CR>
+vnoremap <C-A-j> :action ActivateTerminalToolWindow<CR>
+nnoremap <C-A-g> :action FindInPath<CR>
+nnoremap <C-A-o> :action GotoFile<CR>
+nnoremap <C-A-r> :action ChooseRunConfiguration<CR>
+nnoremap <C-A-p> :action GotoAction<CR>
+map <C-o> :action Back<CR>
+map <C-x> :action ShowErrorDescription<CR>
+
+
+nnoremap <leader>vs :action SplitVertically<CR>
+nnoremap <leader>hs :action SplitHorizontally<CR>
+sethandler <c-j> a:vim
+sethandler <c-k> a:vim
+nnoremap <C-h> <C-w>h
+nnoremap <C-l> <C-w>l
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+
+
+""" map <leader>f <Plug>(easymotion-s)
+""" map <leader>e <Plug>(easymotion-f)
+"""
+""" map <leader>d <Action>(Debug)
+""" map <leader>r <Action>(RenameElement)
+""" map <leader>c <Action>(Stop)
+""" map <leader>z <Action>(ToggleDistractionFreeMode)
+"""
+""" map <leader>s <Action>(SelectInProjectView)
+""" map <leader>a <Action>(Annotate)
+""" map <leader>h <Action>(Vcs.ShowTabbedFileHistory)
+""" map <S-Space> <Action>(GotoNextError)
+"""
+""" map <leader>b <Action>(ToggleLineBreakpoint)
+""" map <leader>o <Action>(FileStructurePopup)
+
+
+nnoremap <C-e> :NERDTreeToggle<CR>
+let g:NERDTreeMapActivateNode='l'
+let g:NERDTreeMapJumpParent='h'
