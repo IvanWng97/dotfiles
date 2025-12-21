@@ -1,0 +1,17 @@
+theme = Dracula
+
+initial-window=false
+
+font-size = 14
+font-thicken = true
+
+macos-titlebar-style = tabs
+# macos-hidden = always
+
+keybind = global:f1=toggle_quick_terminal
+keybind = global:cmd+p=toggle_command_palette
+
+# Quick-terminal
+quick-terminal-screen = mouse
+quick-terminal-animation-duration = 0.05
+
