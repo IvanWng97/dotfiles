@@ -1,6 +1,6 @@
 # appearance
 theme = Dracula
-background-opacity = 0.75
+background-opacity = 0.80
 background-blur-radius = 40
 font-size = 14
 font-thicken = true
@@ -12,7 +12,7 @@ window-save-state = never
 # macOS-specific settings
 macos-titlebar-style = tabs
 macos-option-as-alt = true
-# macos-hidden = always
+macos-hidden = always
 
 # extras
 shell-integration-features = true
