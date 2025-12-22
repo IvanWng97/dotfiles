@@ -58,3 +58,8 @@ alias tk='tmux kill-session -t'
 
 ## tealdeer settings
 export TEALDEER_CONFIG_DIR="$HOME/.config/tealdeer"
+
+### JAVA settings
+export PATH="/opt/homebrew/opt/openjdk@11/bin:$PATH"
+export ANDROID_HOME=/Users/bytedance/Library/Android/sdk
+export ANDROID_AVD_HOME=/Users/bytedance/.android/avd
