@@ -4,6 +4,8 @@ background-opacity = 0.80
 background-blur-radius = 40
 font-size = 14
 font-thicken = true
+adjust-cell-height = 10%
+bold-color = bright
 
 # window settings
 initial-window=false
