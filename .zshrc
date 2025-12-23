@@ -11,6 +11,12 @@ export LS_COLORS="$(vivid generate dracula)"
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 bindkey '`' autosuggest-accept
+  if type brew &>/dev/null; then
+    FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+
+    autoload -Uz compinit
+    compinit
+  fi
 
 ### zoxide settings
 eval "$(zoxide init zsh)"
