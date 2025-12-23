@@ -110,3 +110,5 @@ bin
 .gitconfig
 .gitconfig
 .gitconfig
+.zcompcache
+..zshrc.un~
