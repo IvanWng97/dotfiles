@@ -1,11 +1,17 @@
 # appearance
 theme = Dracula
 background-opacity = 0.80
-background-blur-radius = 40
-font-size = 14
-font-thicken = true
+background-blur = 40
 adjust-cell-height = 10%
 bold-color = bright
+window-padding-balance = true
+window-colorspace = display-p3
+
+# font
+font-size = 14
+font-thicken = true
+font-feature = +calt
+font-feature = +liga
 
 # window settings
 initial-window=false
