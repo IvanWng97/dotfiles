@@ -12,15 +12,15 @@ FAILED=()
 SKIPPED=()
 
 println() {
-    printf "\n${GREEN}==> %s${CLEAR}\n" "$*"
+    printf '\n%s==> %s%s\n' "$GREEN" "$*" "$CLEAR"
 }
 
 print_err() {
-    printf "${RED}%s${CLEAR}\n" "$*" >&2
+    printf '%s%s%s\n' "$RED" "$*" "$CLEAR" >&2
 }
 
 print_skip() {
-    printf "${YELLOW}--> skip: %s (%s not found)${CLEAR}\n" "$1" "$2"
+    printf '%s--> skip: %s (%s not found)%s\n' "$YELLOW" "$1" "$2" "$CLEAR"
     SKIPPED+=("$1")
 }
 
@@ -66,9 +66,10 @@ fi
 
 if command -v cargo >/dev/null 2>&1; then
     println "Updating Rust Packages"
-    crates=$(cargo install --list | grep -E '^[a-z0-9_-]+ v[0-9.]+:$' | cut -f1 -d' ')
-    if [ -n "$crates" ]; then
-        track "Rust" cargo install $crates
+    # shellcheck disable=SC2207  # word splitting on newline-separated crate names is intentional
+    crates=( $(cargo install --list | grep -E '^[a-z0-9_-]+ v[0-9.]+:$' | cut -f1 -d' ') )
+    if [ "${#crates[@]}" -gt 0 ]; then
+        track "Rust" cargo install "${crates[@]}"
     else
         SUCCEEDED+=("Rust")
     fi
@@ -102,15 +103,15 @@ if command -v brew >/dev/null 2>&1; then
     track "Brewfile" brew bundle dump --describe --force --file="$HOME/Backup/Brewfile"
 fi
 
-printf "\n${BLUE}${BOLD}==> Summary${CLEAR}\n"
+printf '\n%s%s==> Summary%s\n' "$BLUE" "$BOLD" "$CLEAR"
 for s in "${SUCCEEDED[@]}"; do
-    printf "  ${GREEN}✓${CLEAR} %s\n" "$s"
+    printf '  %s✓%s %s\n' "$GREEN" "$CLEAR" "$s"
 done
 for s in "${SKIPPED[@]}"; do
-    printf "  ${YELLOW}-${CLEAR} %s (skipped)\n" "$s"
+    printf '  %s-%s %s (skipped)\n' "$YELLOW" "$CLEAR" "$s"
 done
 for s in "${FAILED[@]}"; do
-    printf "  ${RED}✗${CLEAR} %s\n" "$s"
+    printf '  %s✗%s %s\n' "$RED" "$CLEAR" "$s"
 done
 
 [ ${#FAILED[@]} -eq 0 ]
