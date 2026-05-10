@@ -1,9 +1,5 @@
 tap "buo/cask-upgrade"
 tap "homebrew/bundle"
-tap "homebrew/cask"
-tap "homebrew/cask-fonts"
-tap "homebrew/cask-versions"
-tap "homebrew/core"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
 # Yet another cross-platform graphical process/system monitor
@@ -12,8 +8,8 @@ brew "bottom"
 brew "coreutils"
 # Get a file from an HTTP, HTTPS or FTP server
 brew "curl"
-# Modern replacement for 'ls'
-brew "exa"
+# Modern, maintained replacement for 'ls'
+brew "eza"
 # Simple, fast and user-friendly alternative to find
 brew "fd"
 # Text-based UI library

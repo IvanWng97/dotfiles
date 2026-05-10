@@ -1,49 +1,60 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
 BREWFILE=~/Backup/Brewfile
 CARGOFILE=~/Backup/Cargofile
 FISHFILE=~/Backup/Fishfile
 NPMFILE=~/Backup/Npmfile
 PIPFILE=~/Backup/Pipfile
 
+mkdir -p ~/Backup
+
 echo "---------------------------------"
 echo "- Deleting old Backup Files     -"
 echo "---------------------------------"
-if [ -f "$BREWFILE" ]; then
-	rm $BREWFILE
-fi
-if [ -f "$CARGOFILE" ]; then
-	rm $CARGOFILE
-fi
-if [ -f "$FISHFILE" ]; then
-	rm $FISHFILE
-fi
-if [ -f "$NPMFILE" ]; then
-	rm $NPMFILE
-fi
-if [ -f "$PIPFILE" ]; then
-	rm $PIPFILE
-fi
+rm -f "$BREWFILE" "$CARGOFILE" "$FISHFILE" "$NPMFILE" "$PIPFILE"
 
 echo "---------------------------------"
 echo "- Dumping BREW and MAS packages -"
 echo "---------------------------------"
-brew bundle dump --describe --file=~/Backup/Brewfile
+if command -v brew >/dev/null 2>&1; then
+	brew bundle dump --describe --file="$BREWFILE"
+else
+	echo "skip: brew not installed"
+fi
 
 echo "---------------------------------"
 echo "- Dumping NPM packages          -"
 echo "---------------------------------"
-npm list --global --parseable --depth=0 | sed '1d' | awk '{gsub(/\/.*\//,"",$1); print}' >~/Backup/Npmfile
+if command -v npm >/dev/null 2>&1; then
+	npm list --global --parseable --depth=0 | sed '1d' | awk '{gsub(/\/.*\//,"",$1); print}' >"$NPMFILE"
+else
+	echo "skip: npm not installed"
+fi
 
 echo "---------------------------------"
 echo "- Dumping PIP packages          -"
 echo "---------------------------------"
-pip3 freeze >~/Backup/Pipfile
+if command -v pip3 >/dev/null 2>&1; then
+	pip3 freeze >"$PIPFILE"
+else
+	echo "skip: pip3 not installed"
+fi
 
 echo "---------------------------------"
 echo "- Dumping CARGO packages        -"
 echo "---------------------------------"
-cargo install --list | egrep '^[a-z0-9_-]+ v[0-9.]+:$' | cut -f1 -d' ' >>~/Backup/Cargofile
+if command -v cargo >/dev/null 2>&1; then
+	cargo install --list | grep -E '^[a-z0-9_-]+ v[0-9.]+:$' | cut -f1 -d' ' >"$CARGOFILE"
+else
+	echo "skip: cargo not installed"
+fi
 
 echo "---------------------------------"
 echo "- Dumping FISH packages         -"
 echo "---------------------------------"
-cp ~/.config/fish/fish_plugins ~/Backup/Fishfile
+if [ -f ~/.config/fish/fish_plugins ]; then
+	cp ~/.config/fish/fish_plugins "$FISHFILE"
+else
+	echo "skip: ~/.config/fish/fish_plugins missing"
+fi

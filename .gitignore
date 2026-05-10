@@ -77,6 +77,10 @@ go/pkg
 .config/thefuck
 .config/tmux/plugins
 .config/tmux/resurrect
+.aria2/aria2.log
+.aria2/aria2.session
+.aria2/dht.dat
+.aria2/dht6.dat
 .wakatime*
 
 .config/spotify-player
@@ -112,3 +116,5 @@ bin
 .gitconfig
 .zcompcache
 ..zshrc.un~
+/.gemini
+/.gk

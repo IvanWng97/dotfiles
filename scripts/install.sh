@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
 BREWFILE=~/Backup/Brewfile
 CARGOFILE=~/Backup/Cargofile
 FISHFILE=~/Backup/Fishfile
@@ -7,34 +10,57 @@ PIPFILE=~/Backup/Pipfile
 echo "------------------------------------"
 echo "- Installing BREW and MAS packages -"
 echo "------------------------------------"
-brew bundle install --file=~/Backup/Brewfile
+if command -v brew >/dev/null 2>&1 && [ -f "$BREWFILE" ]; then
+	brew bundle install --file="$BREWFILE"
+else
+	echo "skip: brew not installed or $BREWFILE missing"
+fi
 
 echo "------------------------------------"
 echo "- Installing NPM packages          -"
 echo "------------------------------------"
-npm list --global --parseable --depth=0 | sed '1d' | awk '{gsub(/\/.*\//,"",$1); print}' >~/Backup/Npmfile
+if command -v npm >/dev/null 2>&1 && [ -s "$NPMFILE" ]; then
+	xargs npm install --location=global <"$NPMFILE"
+else
+	echo "skip: npm not installed or $NPMFILE empty"
+fi
 
 echo "------------------------------------"
 echo "- Installing PIP packages          -"
 echo "------------------------------------"
-pip3 install -r ~/Backup/Pipfile
+if command -v pip3 >/dev/null 2>&1 && [ -f "$PIPFILE" ]; then
+	pip3 install --user --break-system-packages -r "$PIPFILE"
+else
+	echo "skip: pip3 not installed or $PIPFILE missing"
+fi
 
 echo "------------------------------------"
 echo "- Installing CARGO packages        -"
 echo "------------------------------------"
-xargs cargo install <~/Backup/Cargofile
+if command -v cargo >/dev/null 2>&1 && [ -s "$CARGOFILE" ]; then
+	xargs cargo install <"$CARGOFILE"
+else
+	echo "skip: cargo not installed or $CARGOFILE empty"
+fi
 
 echo "------------------------------------"
 echo "- Installing FISH packages         -"
 echo "------------------------------------"
-for PLUGIN in $(cat $FISHFILE); do
-	echo $PLUGIN
-	fish -c "fisher install $PLUGIN"
-done
+if command -v fish >/dev/null 2>&1 && [ -f "$FISHFILE" ]; then
+	while IFS= read -r plugin; do
+		[ -z "$plugin" ] && continue
+		echo "$plugin"
+		fish -c "fisher install $plugin"
+	done <"$FISHFILE"
+else
+	echo "skip: fish not installed or $FISHFILE missing"
+fi
 
 echo "------------------------------------"
-echo "- Installing TPM packages          -"
+echo "- Installing TPM                   -"
 echo "------------------------------------"
-git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
-
-~/.config/tmux/plugins/tpm/bin/install_plugins
+TPM_DIR="$HOME/.config/tmux/plugins/tpm"
+if [ ! -d "$TPM_DIR" ]; then
+	git clone https://github.com/tmux-plugins/tpm "$TPM_DIR"
+fi
+"$TPM_DIR/bin/install_plugins"

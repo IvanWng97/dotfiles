@@ -97,6 +97,11 @@ else
     print_skip "Tmux" "tpm"
 fi
 
+if command -v brew >/dev/null 2>&1; then
+    println "Refreshing Brewfile"
+    track "Brewfile" brew bundle dump --describe --force --file="$HOME/Backup/Brewfile"
+fi
+
 printf "\n${BLUE}${BOLD}==> Summary${CLEAR}\n"
 for s in "${SUCCEEDED[@]}"; do
     printf "  ${GREEN}✓${CLEAR} %s\n" "$s"
