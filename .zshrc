@@ -69,3 +69,6 @@ export TEALDEER_CONFIG_DIR="$HOME/.config/tealdeer"
 export PATH="/opt/homebrew/opt/openjdk@11/bin:$PATH"
 export ANDROID_HOME="$HOME/Library/Android/sdk"
 export ANDROID_AVD_HOME="$HOME/.android/avd"
+
+### CLAUDE settings
+export ENABLE_LSP_TOOL=1
