@@ -51,39 +51,76 @@ jobs:
           state_file=.github/release-watch-state.json
           [ -f "$state_file" ] || echo '{}' > "$state_file"
 
-          # tool slug → upstream repo. Slug matches the .config/<slug>/ dir.
-          declare -A repos=(
-            [alacritty]=alacritty/alacritty
-            [fish]=fish-shell/fish-shell
-            [ghostty]=ghostty-org/ghostty
-            [helix]=helix-editor/helix
-            [kitty]=kovidgoyal/kitty
-            [lazygit]=jesseduffield/lazygit
-            [lf]=gokcehan/lf
-            [starship]=starship/starship
-            [tealdeer]=tealdeer-rs/tealdeer
-            [tmux]=tmux/tmux
-            [xplr]=sayanarijit/xplr
-            [zellij]=zellij-org/zellij
+          # tool slug → "repo:source". `source` is "release" (use the
+          # GitHub Releases API and ignore pre-releases) or "tag" (the
+          # repo publishes version tags but no GitHub Releases — e.g.
+          # ghostty, which only ships a rolling "tip" prerelease). Slug
+          # must match the .config/<slug>/ dir.
+          declare -A tools=(
+            [alacritty]="alacritty/alacritty:release"
+            [fish]="fish-shell/fish-shell:release"
+            [ghostty]="ghostty-org/ghostty:tag"
+            [helix]="helix-editor/helix:release"
+            [kitty]="kovidgoyal/kitty:release"
+            [lazygit]="jesseduffield/lazygit:release"
+            [lf]="gokcehan/lf:release"
+            [starship]="starship/starship:release"
+            [tealdeer]="tealdeer-rs/tealdeer:release"
+            [tmux]="tmux/tmux:release"
+            [xplr]="sayanarijit/xplr:release"
+            [zellij]="zellij-org/zellij:release"
           )
 
           updates="[]"
           new_state=$(cat "$state_file")
 
-          for tool in "${!repos[@]}"; do
-            repo="${repos[$tool]}"
-            # `releases/latest` ignores pre-releases — intentional, we only
-            # want to surface stable upgrades.
-            latest=$(gh api "repos/$repo/releases/latest" --jq '.tag_name' 2>/dev/null || echo "")
+          for tool in "${!tools[@]}"; do
+            cfg="${tools[$tool]}"
+            repo="${cfg%:*}"
+            source="${cfg##*:}"
+            latest=""
+            url=""
+
+            if [ "$source" = "release" ]; then
+              # IMPORTANT: don't use `gh api --jq` here. On 4xx, gh
+              # dumps the error JSON to stdout *and* exits non-zero,
+              # so `latest=$(gh api ... --jq '.tag_name' || echo "")`
+              # ends up holding the error body, not empty string,
+              # and the empty-check below fails to skip. Capture the
+              # whole body first, parse only on success.
+              if response=$(gh api "repos/$repo/releases/latest" 2>/dev/null); then
+                latest=$(jq -r '.tag_name // ""' <<<"$response")
+                url=$(jq -r '.html_url // ""' <<<"$response")
+              fi
+            else
+              # Tag mode: take the most recent tag. GitHub's /tags
+              # endpoint sorts by tag creation time, which is good
+              # enough — repos that need this path don't tend to
+              # backport tags on old branches.
+              if response=$(gh api "repos/$repo/tags?per_page=1" 2>/dev/null); then
+                latest=$(jq -r '.[0].name // ""' <<<"$response")
+              fi
+              if [ -n "$latest" ]; then
+                prev_for_url=$(jq -r --arg t "$tool" '.[$t] // ""' <<<"$new_state")
+                if [ -n "$prev_for_url" ]; then
+                  # Compare URL: best signal for tag-only repos since
+                  # there are no release notes to link to.
+                  url="https://github.com/$repo/compare/${prev_for_url}...${latest}"
+                else
+                  url="https://github.com/$repo/releases/tag/${latest}"
+                fi
+              fi
+            fi
+
             if [ -z "$latest" ]; then
-              echo "skip $tool ($repo): no stable releases"
+              echo "skip $tool ($repo, source=$source): no upstream version available"
               continue
             fi
+
             prev=$(jq -r --arg t "$tool" '.[$t] // ""' <<<"$new_state")
             if [ "$latest" != "$prev" ]; then
-              url=$(gh api "repos/$repo/releases/latest" --jq '.html_url')
-              updates=$(jq --arg t "$tool" --arg r "$repo" --arg p "$prev" --arg n "$latest" --arg u "$url" \
-                '. + [{tool:$t, repo:$r, previous:$p, latest:$n, url:$u}]' <<<"$updates")
+              updates=$(jq --arg t "$tool" --arg r "$repo" --arg p "$prev" --arg n "$latest" --arg u "$url" --arg s "$source" \
+                '. + [{tool:$t, repo:$r, previous:$p, latest:$n, url:$u, source:$s}]' <<<"$updates")
             fi
             new_state=$(jq --arg t "$tool" --arg v "$latest" '.[$t] = $v' <<<"$new_state")
           done
@@ -106,21 +143,35 @@ jobs:
           # hit "This command requires approval" mid-run and the model
           # gives up without opening an issue.
           claude_args: |
-            --allowedTools "Bash(gh issue create:*),Bash(gh release view:*),Bash(cat:*),Read,Glob,Grep,WebFetch"
+            --allowedTools "Bash(gh issue create:*),Bash(gh release view:*),Bash(gh api:*),Bash(cat:*),Read,Glob,Grep,WebFetch"
           prompt: |
             Read `/tmp/release-updates.json` — it lists upstream tools
-            that published a new stable release since last week. Each
-            entry has: tool, repo, previous, latest, url.
+            that shipped a new version since last week. Each entry has:
+            tool, repo, previous, latest, url, source.
+
+            `source` is "release" (the repo publishes GitHub Releases —
+            url points at the release page, has changelog notes) or
+            "tag" (the repo only tags, no release notes attached — url
+            points at a compare diff, e.g. ghostty).
 
             ## Method
 
             For each entry:
 
-              1. Fetch the release notes. Prefer
-                 `gh release view <latest> --repo <repo>`; fall back to
-                 WebFetch on `url`. If `previous` is non-empty and several
-                 tags happened in between, also skim the intermediate
-                 release notes via `gh api repos/<repo>/releases`.
+              1. Fetch the changelog.
+                 - `source` = "release": prefer
+                   `gh release view <latest> --repo <repo>`; fall back to
+                   WebFetch on `url`. If `previous` is non-empty and
+                   intermediate tags exist, skim them via
+                   `gh api repos/<repo>/releases`.
+                 - `source` = "tag": no release notes exist. Use
+                   WebFetch on `url` (a compare diff), and/or Read the
+                   repo's CHANGELOG via
+                   `gh api repos/<repo>/contents/CHANGELOG.md`
+                   (filename varies — try CHANGELOG.md, CHANGES.md,
+                   docs/CHANGELOG.md). If neither yields useful
+                   information, skip the tool in the issue body — a
+                   bare tag bump without a changelog is not actionable.
               2. List the config files under `.config/<tool>/` (use
                  Glob) and Read each — filenames vary per tool.
               3. Cross-reference the changelog against the user's
