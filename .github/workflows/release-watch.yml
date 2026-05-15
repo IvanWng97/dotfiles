@@ -1,0 +1,212 @@
+name: Release Watch
+
+# Weekly cron that checks upstream releases of every tool with a config
+# under .config/, diffs against the last-seen versions in
+# .github/release-watch-state.json, and opens ONE GitHub issue
+# summarizing changes that would actually affect THIS repo's configs.
+# Silent on a clean week, silent when upstream changes don't touch the
+# options the user has set.
+
+on:
+  schedule:
+    # Mondays 09:00 UTC — findings visible at start of week.
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+
+concurrency:
+  group: release-watch
+  cancel-in-progress: true
+
+permissions:
+  contents: write     # Commit updated state file back to main.
+  issues: write       # Open the summary issue.
+  id-token: write     # Required by claude-code-action.
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          # Full history so the commit-state step can `git pull --rebase`
+          # if main moved while the workflow was running.
+          fetch-depth: 0
+
+      - name: Ensure release-watch label exists
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh label create release-watch \
+            --color "0075ca" \
+            --description "Upstream release with changes worth reviewing" \
+            --force
+
+      - name: Diff upstream releases against last-seen state
+        id: diff
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          state_file=.github/release-watch-state.json
+          [ -f "$state_file" ] || echo '{}' > "$state_file"
+
+          # tool slug → upstream repo. Slug matches the .config/<slug>/ dir.
+          declare -A repos=(
+            [alacritty]=alacritty/alacritty
+            [fish]=fish-shell/fish-shell
+            [ghostty]=ghostty-org/ghostty
+            [helix]=helix-editor/helix
+            [kitty]=kovidgoyal/kitty
+            [lazygit]=jesseduffield/lazygit
+            [lf]=gokcehan/lf
+            [starship]=starship/starship
+            [tealdeer]=tealdeer-rs/tealdeer
+            [tmux]=tmux/tmux
+            [xplr]=sayanarijit/xplr
+            [zellij]=zellij-org/zellij
+          )
+
+          updates="[]"
+          new_state=$(cat "$state_file")
+
+          for tool in "${!repos[@]}"; do
+            repo="${repos[$tool]}"
+            # `releases/latest` ignores pre-releases — intentional, we only
+            # want to surface stable upgrades.
+            latest=$(gh api "repos/$repo/releases/latest" --jq '.tag_name' 2>/dev/null || echo "")
+            if [ -z "$latest" ]; then
+              echo "skip $tool ($repo): no stable releases"
+              continue
+            fi
+            prev=$(jq -r --arg t "$tool" '.[$t] // ""' <<<"$new_state")
+            if [ "$latest" != "$prev" ]; then
+              url=$(gh api "repos/$repo/releases/latest" --jq '.html_url')
+              updates=$(jq --arg t "$tool" --arg r "$repo" --arg p "$prev" --arg n "$latest" --arg u "$url" \
+                '. + [{tool:$t, repo:$r, previous:$p, latest:$n, url:$u}]' <<<"$updates")
+            fi
+            new_state=$(jq --arg t "$tool" --arg v "$latest" '.[$t] = $v' <<<"$new_state")
+          done
+
+          echo "$new_state" > "$state_file"
+          echo "$updates" > /tmp/release-updates.json
+          count=$(jq 'length' <<<"$updates")
+          echo "count=$count" >> "$GITHUB_OUTPUT"
+          echo "Detected $count upgrades"
+          jq -r '.[] | "  - \(.tool): \(.previous) → \(.latest)"' <<<"$updates"
+
+      - name: Summarize releases and open issue
+        if: steps.diff.outputs.count != '0'
+        uses: anthropics/claude-code-action@v1
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          # Explicit allow-list. Without these, gh / Read / Grep commands
+          # hit "This command requires approval" mid-run and the model
+          # gives up without opening an issue.
+          claude_args: |
+            --allowedTools "Bash(gh issue create:*),Bash(gh release view:*),Bash(cat:*),Read,Glob,Grep,WebFetch"
+          prompt: |
+            Read `/tmp/release-updates.json` — it lists upstream tools
+            that published a new stable release since last week. Each
+            entry has: tool, repo, previous, latest, url.
+
+            ## Method
+
+            For each entry:
+
+              1. Fetch the release notes. Prefer
+                 `gh release view <latest> --repo <repo>`; fall back to
+                 WebFetch on `url`. If `previous` is non-empty and several
+                 tags happened in between, also skim the intermediate
+                 release notes via `gh api repos/<repo>/releases`.
+              2. List the config files under `.config/<tool>/` (use
+                 Glob) and Read each — filenames vary per tool.
+              3. Cross-reference the changelog against the user's
+                 config. Flag ONLY:
+                   - new options the user would plausibly want to opt
+                     into given their existing setup
+                   - options the user IS using that are deprecated,
+                     renamed, or removed
+                   - default value changes that contradict the user's
+                     explicit setting (i.e. their override is now
+                     redundant or wrong)
+                   - breaking syntax changes that affect their file
+
+            Ignore pure internals, performance work, unrelated
+            subsystems, and additions in areas the user hasn't
+            configured.
+
+            ## Action
+
+            - **No actionable findings across all tools:** print
+              `release watch: no actionable changes` and EXIT. Do NOT
+              open an issue. Tag bumps alone are not a reason to file.
+            - **≥1 actionable finding:** open exactly ONE issue:
+              ```
+              gh issue create \
+                --title "Release watch: $(date -u +%Y-%m-%d)" \
+                --label release-watch \
+                --body "$BODY"
+              ```
+              Body structure:
+                - One headline line listing every upgraded tool with
+                  `previous → latest`, even tools that produced no
+                  findings (so the reader sees the full delta).
+                - One H2 section per tool that HAS findings. Skip
+                  silent tools in the section list.
+                - Within each section, bullets in priority order:
+                  breaking > deprecation > default change > new
+                  opt-in. For each bullet: one-line description, the
+                  config file + line in this repo that's relevant
+                  (e.g. `.config/starship/starship.toml:42`), the
+                  suggested edit when obvious, and the release-notes
+                  URL.
+
+            ## Constraints
+
+            - Issue body ≤ 1000 words. If you'd exceed, drop the
+              lowest-priority items.
+            - Cite real paths and line numbers. Don't invent
+              suggestions you haven't verified against the actual
+              config file.
+            - Don't open a duplicate — the state file commit below
+              prevents re-firing on the same tag, but if a prior
+              `release-watch` issue is still open for the same week,
+              skip filing.
+
+      - name: Commit updated state
+        # Always commit when there were upgrades, even if Claude
+        # decided not to open an issue — otherwise next week's run
+        # would re-process the same tags and keep paying for analysis
+        # that already concluded "no actionable changes."
+        #
+        # Implicit `success() &&` on the if means this is skipped when
+        # the Claude step fails, which is what we want: failure → retry
+        # next week with the same state.
+        if: steps.diff.outputs.count != '0'
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/release-watch-state.json
+          if git diff --staged --quiet; then
+            echo "no state changes to commit"
+            exit 0
+          fi
+          git commit -m "chore: bump release-watch state"
+
+          # Retry push with rebase in case main moved during the run.
+          # Without this, a concurrent user push silently wipes the
+          # state update and next week's run re-fires on the same tags.
+          for attempt in 1 2 3; do
+            if git push; then
+              exit 0
+            fi
+            echo "push attempt $attempt rejected, fetching + rebasing"
+            git fetch origin main
+            git rebase origin/main
+          done
+          echo "state push failed after 3 attempts" >&2
+          exit 1
