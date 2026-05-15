@@ -1,1 +1,30 @@
 theme = "dracula"
+
+[editor]
+line-number = "relative"
+
+[editor.statusline]
+left = ["mode", "spinner", "diagnostics"]
+
+[editor.lsp]
+display-inlay-hints = true
+
+[editor.file-picker]
+hidden = false
+
+[keys.normal]
+G = "goto_file_end"
+
+"{" = ["goto_prev_paragraph", "collapse_selection"]
+"}" = ["goto_next_paragraph", "collapse_selection"]
+V = ["select_mode", "extend_to_line_bounds"]
+D = ["extend_to_line_end", "yank_main_selection_to_clipboard", "delete_selection"]
+
+
+# Uncanny valley stuff, this makes w and b behave as they do Vim
+w = ["move_next_word_start", "move_char_right", "collapse_selection"]
+W = ["move_next_long_word_start", "move_char_right", "collapse_selection"]
+e = ["move_next_word_end", "collapse_selection"]
+E = ["move_next_long_word_end", "collapse_selection"]
+b = ["move_prev_word_start", "collapse_selection"]
+B = ["move_prev_long_word_start", "collapse_selection"]
