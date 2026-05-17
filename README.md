@@ -1,5 +1,5 @@
 <h1 align="center">Welcome to Evan's dotfiles 👋</h1>
-💻 ghostty, neovim, fish/zsh, tmux, starship, lazygit, homebrew — my whole world
+💻 ghostty, neovim, zsh, tmux, starship, lazygit, homebrew — my whole world
 <div align="center">
 <img width="720" alt="IMG_1059" src="https://user-images.githubusercontent.com/39482599/222035732-e245becc-dd67-4d42-8c8c-28a2592d4d13.png">
 </div>
@@ -52,11 +52,9 @@ Each top-level directory is a stow package:
 
 ### Shell
 
-Two shells are configured side-by-side:
-- [Fish](config/.config/fish/config.fish) with the abbreviations and helper functions I actually use day-to-day
-- [Zsh](zsh/.zshrc), kept lean — eza/zoxide/fzf/bat/starship glue
+[Zsh](zsh/.zshrc) is the daily driver — kept lean, with eza/zoxide/fzf/bat/starship glue.
 
-[Starship](https://starship.rs) is the prompt for both — see [`config.toml`](config/.config/starship/config.toml).
+[Starship](https://starship.rs) handles the prompt — see [`config.toml`](config/.config/starship/config.toml).
 
 ### Editors
 
