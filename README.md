@@ -1,4 +1,4 @@
-<h1 align="center">Welcome to Evan's dotfiles 👋</h1>
+<h1 align="center">Welcome to Ivan's dotfiles 👋</h1>
 💻 ghostty, neovim, zsh, tmux, starship, lazygit, homebrew — my whole world
 <div align="center">
 <img width="720" alt="IMG_1059" src="https://user-images.githubusercontent.com/39482599/222035732-e245becc-dd67-4d42-8c8c-28a2592d4d13.png">
@@ -6,7 +6,7 @@
 
 ## Initial Setup and Installation
 
-> All shell commands manage **globally installed packages** (Homebrew, npm, pipx, cargo, fisher, mas).
+> All shell commands manage **globally installed packages** (Homebrew, npm, pipx, cargo, mas).
 
 The repo lives at `~/dotfiles/` and uses [GNU stow](https://www.gnu.org/software/stow/) to symlink each package into `$HOME` — `$HOME` itself is not a git working tree.
 
@@ -30,10 +30,10 @@ cd ~/dotfiles && make bootstrap
 | `make uninstall-links` | Remove the symlinks (configs stay safe in `~/dotfiles/`). |
 | `make relink` | `uninstall-links` then `install-links` — useful after adding a new file to a package. |
 | `make symlinks-check` | Verify every package file has a matching, correctly-resolved symlink in `$HOME`; reports orphans too. Exits non-zero on issues. |
-| `make update` | Upgrades brew/npm/pipx/cargo/fisher/mas/tmux packages and re-dumps `Backup/Brewfile` so it matches reality. |
+| `make update` | Upgrades brew/npm/pipx/cargo/mas/tmux packages and re-dumps `Backup/Brewfile` so it matches reality. |
 | `make backup` | Re-dumps every package list into `Backup/` for committing. |
 
-All four scripts live in [`scripts/`](scripts) and share a small set of helpers (`set -euo pipefail`, per-tool guards, summary output for `update.sh`).
+All five scripts (`bootstrap`, `install`, `update`, `backup`, `check-links`) live in [`scripts/`](scripts) and share a small set of helpers (`set -euo pipefail`, colored output, per-tool guards).
 
 ### Stow packages
 
@@ -63,7 +63,7 @@ Scripts under `scripts/` are written in zsh (`#!/usr/bin/env zsh`); the lint wor
 
 [Zsh](zsh/.zshrc) is the daily driver — kept lean, with eza/zoxide/fzf/bat/starship glue.
 
-[Starship](https://starship.rs) handles the prompt — see [`config.toml`](config/.config/starship/config.toml).
+[Starship](https://starship.rs) handles the prompt — see [`config.toml`](starship/.config/starship/config.toml).
 
 ### Editors
 
@@ -72,19 +72,19 @@ Scripts under `scripts/` are written in zsh (`#!/usr/bin/env zsh`); the lint wor
 | Main Configuration File | `~/.vimrc` | `~/.config/nvim/init.lua` |
 | Configuration directory | `~/.vim`   | `~/.config/nvim`          |
 
-[Helix](config/.config/helix/config.toml) is also set up for quick edits.
+[Helix](helix/.config/helix/config.toml) is also set up for quick edits.
 
 ### Multiplexer
 
-Tmux config lives in [`tmux.conf`](config/.config/tmux/tmux.conf). Prefix is `C-Space`; `C-h/j/k/l` navigates panes (vim-aware), `M-h/j/k/l` resizes them. [Zellij](config/.config/zellij/config.kdl) is configured as an alternative.
+Tmux config lives in [`tmux.conf`](tmux/.config/tmux/tmux.conf). Prefix is `C-Space`; `C-h/j/k/l` navigates panes (vim-aware), `M-h/j/k/l` resizes them. [Zellij](zellij/.config/zellij/config.kdl) is configured as an alternative.
 
 ### Terminals
 
-Configs for [Ghostty](config/.config/ghostty/config), [Kitty](config/.config/kitty/kitty.conf), and [Alacritty](config/.config/alacritty/alacritty.toml) — Ghostty is the daily driver.
+Configs for [Ghostty](ghostty/.config/ghostty/config), [Kitty](kitty/.config/kitty/kitty.conf), and [Alacritty](alacritty/.config/alacritty/alacritty.toml) — Ghostty is the daily driver.
 
 ### Other tools
 
-[lazygit](config/.config/lazygit/config.yml), [tealdeer](config/.config/tealdeer/config.toml), [lf](config/.config/lf/lfrc), [xplr](config/.config/xplr/init.lua), [helix](config/.config/helix/config.toml).
+[lazygit](lazygit/.config/lazygit/config.yml), [tealdeer](tealdeer/.config/tealdeer/config.toml), [lf](lf/.config/lf/lfrc), [xplr](xplr/.config/xplr/init.lua), [helix](helix/.config/helix/config.toml).
 
 ### Color scheme
 
@@ -96,16 +96,8 @@ Everything is [Dracula](https://draculatheme.com)!
 
 ## Author
 
-👤 **Evan**
-
-- Website: medium.com/navepnow
-- Twitter: [@NavePnow](https://twitter.com/NavePnow)
-- GitHub: [@NavePnow](https://github.com/NavePnow)
+👤 **Ivan** — [@IvanWng97](https://github.com/IvanWng97)
 
 ## Show your support
 
 Give a ⭐️ if this project helped you!
-
-<a href="https://www.patreon.com/NavePnow">
-  <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
-</a>
