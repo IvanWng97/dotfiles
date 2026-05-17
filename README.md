@@ -8,30 +8,55 @@
 
 > All shell commands manage **globally installed packages** (Homebrew, npm, pipx, cargo, fisher, mas).
 
-### Prerequisites
+The repo lives at `~/dotfiles/` and uses [GNU stow](https://www.gnu.org/software/stow/) to symlink each package into `$HOME` — `$HOME` itself is not a git working tree.
 
-- macOS with [Homebrew](https://brew.sh)
-- `git` (ships with the Xcode CLT) and a checkout of this repo at `$HOME`
+### Fresh Mac
+
+```sh
+xcode-select --install        # one-time, GUI prompt
+git clone https://github.com/IvanWng97/dotfiles.git ~/dotfiles
+cd ~/dotfiles && make bootstrap
+```
+
+`make bootstrap` installs Homebrew + stow, backs up any conflicting files in `$HOME` to `~/.dotfiles-pre-stow-<timestamp>/`, stows the dotfile packages, and runs `make install`. Pass `SKIP_INSTALL=1` to skip the package install step.
 
 ### Workflows
 
 | Command | What it does |
 | --- | --- |
-| `make install` | First-time bootstrap: installs everything from `Backup/Brewfile`, `Npmfile`, `Pipfile`, `Cargofile`, `Fishfile`, plus tpm + plugins. |
+| `make bootstrap` | Fresh-machine setup: brew + stow + symlinks + `make install`. Idempotent. |
+| `make install` | Installs everything from `Backup/Brewfile`, `Npmfile`, `Pipfile`, `Cargofile`, `Fishfile`, plus tpm + plugins. |
+| `make install-links` | Re-run `stow` to (re)create symlinks under `$HOME`. |
+| `make uninstall-links` | Remove the symlinks (configs stay safe in `~/dotfiles/`). |
+| `make relink` | `uninstall-links` then `install-links` — useful after adding a new file to a package. |
 | `make update` | Upgrades brew/npm/pipx/cargo/fisher/mas/tmux packages and re-dumps `Backup/Brewfile` so it matches reality. |
 | `make backup` | Re-dumps every package list into `Backup/` for committing. |
 
-All three live in [`scripts/`](scripts) and share a small set of helpers (`set -euo pipefail`, per-tool guards, summary output for `update.sh`).
+All four scripts live in [`scripts/`](scripts) and share a small set of helpers (`set -euo pipefail`, per-tool guards, summary output for `update.sh`).
+
+### Stow packages
+
+Each top-level directory is a stow package:
+
+| Package | Symlinks into |
+| --- | --- |
+| `aria2/` | `~/.aria2/aria2.conf` |
+| `bash/` | `~/.bashrc` |
+| `claude/` | `~/.claude/settings.json` |
+| `config/` | `~/.config/{alacritty,fish,ghostty,helix,kitty,lazygit,lf,starship,tealdeer,tmux,xplr,zellij,git}/...` |
+| `czrc/` | `~/.czrc` |
+| `vim/` | `~/.vimrc`, `~/.ideavimrc` |
+| `zsh/` | `~/.zshrc` |
 
 ## Local Settings
 
 ### Shell
 
 Two shells are configured side-by-side:
-- [Fish](.config/fish/config.fish) with the abbreviations and helper functions I actually use day-to-day
-- [Zsh](.zshrc), kept lean — eza/zoxide/fzf/bat/starship glue
+- [Fish](config/.config/fish/config.fish) with the abbreviations and helper functions I actually use day-to-day
+- [Zsh](zsh/.zshrc), kept lean — eza/zoxide/fzf/bat/starship glue
 
-[Starship](https://starship.rs) is the prompt for both — see [`config.toml`](.config/starship/config.toml).
+[Starship](https://starship.rs) is the prompt for both — see [`config.toml`](config/.config/starship/config.toml).
 
 ### Editors
 
@@ -40,19 +65,19 @@ Two shells are configured side-by-side:
 | Main Configuration File | `~/.vimrc` | `~/.config/nvim/init.lua` |
 | Configuration directory | `~/.vim`   | `~/.config/nvim`          |
 
-[Helix](.config/helix/config.toml) is also set up for quick edits.
+[Helix](config/.config/helix/config.toml) is also set up for quick edits.
 
 ### Multiplexer
 
-Tmux config lives in [`tmux.conf`](.config/tmux/tmux.conf). Prefix is `C-Space`; `C-h/j/k/l` navigates panes (vim-aware), `M-h/j/k/l` resizes them. [Zellij](.config/zellij/config.kdl) is configured as an alternative.
+Tmux config lives in [`tmux.conf`](config/.config/tmux/tmux.conf). Prefix is `C-Space`; `C-h/j/k/l` navigates panes (vim-aware), `M-h/j/k/l` resizes them. [Zellij](config/.config/zellij/config.kdl) is configured as an alternative.
 
 ### Terminals
 
-Configs for [Ghostty](.config/ghostty/config), [Kitty](.config/kitty/kitty.conf), and [Alacritty](.config/alacritty/alacritty.toml) — Ghostty is the daily driver.
+Configs for [Ghostty](config/.config/ghostty/config), [Kitty](config/.config/kitty/kitty.conf), and [Alacritty](config/.config/alacritty/alacritty.toml) — Ghostty is the daily driver.
 
 ### Other tools
 
-[lazygit](.config/lazygit/config.yml), [tealdeer](.config/tealdeer/config.toml), [lf](.config/lf/lfrc), [xplr](.config/xplr/init.lua).
+[lazygit](config/.config/lazygit/config.yml), [tealdeer](config/.config/tealdeer/config.toml), [lf](config/.config/lf/lfrc), [xplr](config/.config/xplr/init.lua), [helix](config/.config/helix/config.toml).
 
 ### Color scheme
 

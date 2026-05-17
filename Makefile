@@ -1,7 +1,12 @@
 DOT_SCRIPTS = ./scripts
 STOW_PACKAGES = aria2 bash claude config czrc vim zsh
 
-.PHONY: backup install update install-links uninstall-links relink
+.PHONY: bootstrap backup install update install-links uninstall-links relink
+
+bootstrap:
+	@echo "~>> [[ Bootstrapping fresh machine ]] <<~"
+	@echo
+	@bash -c $(DOT_SCRIPTS)/bootstrap.sh
 
 update:
 	@echo "~>> [[ Updating ]] <<~"
