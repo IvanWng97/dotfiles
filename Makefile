@@ -35,12 +35,12 @@ install-links:  ## Stow every package into $HOME
 	@echo "~>> [[ Stowing $(words $(STOW_PACKAGES)) packages ]] <<~"
 	@echo
 	@mkdir -p $(HOME)/.config $(HOME)/.aria2 $(HOME)/.claude
-	stow -v -t $(HOME) $(STOW_PACKAGES)
+	stow -v --no-folding -t $(HOME) $(STOW_PACKAGES)
 
 uninstall-links:  ## Remove all stowed symlinks (configs stay in repo)
 	@echo "~>> [[ Unstowing $(words $(STOW_PACKAGES)) packages ]] <<~"
 	@echo
-	stow -v -D -t $(HOME) $(STOW_PACKAGES)
+	stow -v --no-folding -D -t $(HOME) $(STOW_PACKAGES)
 
 relink: uninstall-links install-links  ## Re-run unstow then stow (after adding files)
 

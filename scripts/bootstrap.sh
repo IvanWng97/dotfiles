@@ -103,8 +103,13 @@ fi
 mkdir -p "$HOME/.config" "$HOME/.aria2" "$HOME/.claude"
 
 # 5. Stow all packages
+# --no-folding forces per-file symlinks. Without it, stow folds entire
+# package dirs into single dir-symlinks when the target dir is empty
+# (fresh-Mac case), which means any runtime write by a tool ends up
+# inside the repo. Per-file symlinks avoid that and also make the
+# symlinks-check logic uniform across machines.
 info "Stowing ${#STOW_PACKAGES} packages into \$HOME"
-stow -v -t "$HOME" "${STOW_PACKAGES[@]}"
+stow -v --no-folding -t "$HOME" "${STOW_PACKAGES[@]}"
 ok "Symlinks created"
 
 # 6. Install packages (skippable)
