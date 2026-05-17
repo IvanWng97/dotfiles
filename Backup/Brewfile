@@ -69,6 +69,8 @@ brew "ruby"
 brew "shellcheck"
 # Cross-shell prompt for astronauts
 brew "starship"
+# Organize software neatly under a single directory tree (e.g. /usr/local)
+brew "stow"
 # Very fast implementation of tldr in Rust
 brew "tealdeer"
 # Terminal multiplexer
@@ -102,7 +104,7 @@ cask "brewforge/chinese/clashx-meta"
 # Anthropic's official Claude AI desktop app
 cask "claude"
 # Terminal-based AI coding assistant
-cask "claude-code"
+cask "claude-code@latest"
 # All-in-one toolbox for developers
 cask "devutils"
 # Voice and text chat software
@@ -146,6 +148,8 @@ cask "syntax-highlight"
 cask "telegram"
 # VPN and WiFi proxy
 cask "thunder"
+# Web browser focusing on security
+cask "tor-browser"
 # File transfer application
 cask "transmit"
 # Open-source code editor
@@ -185,6 +189,7 @@ vscode "eamodio.gitlens"
 vscode "esbenp.prettier-vscode"
 vscode "foxundermoon.shell-format"
 vscode "fwcd.kotlin"
+vscode "github.copilot-chat"
 vscode "github.vscode-github-actions"
 vscode "github.vscode-pull-request-github"
 vscode "golang.go"

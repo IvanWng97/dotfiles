@@ -1,9 +1,2 @@
-altgraph==0.17.3
-future==0.18.3
-greenlet==2.0.2
-macholib==1.16.2
-msgpack==1.0.4
-neovim==0.3.1
-pynvim==0.4.3
-sdist==0.0.0
-six==1.16.0
+setuptools==82.0.1
+wheel==0.47.0
