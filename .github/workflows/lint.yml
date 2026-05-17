@@ -5,13 +5,19 @@ on:
   pull_request:
 
 jobs:
-  shellcheck:
+  zsh-syntax:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - uses: ludeeus/action-shellcheck@2.0.0
-        with:
-          scandir: ./scripts
+      - name: Install zsh
+        run: sudo apt-get update && sudo apt-get install -y zsh
+      - name: Syntax check scripts
+        run: |
+          set -e
+          for f in scripts/*.sh; do
+            echo "==> $f"
+            zsh -n "$f"
+          done
 
   actionlint:
     runs-on: ubuntu-latest

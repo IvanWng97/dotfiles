@@ -1,8 +1,8 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BACKUP_DIR="$SCRIPT_DIR/../Backup"
+SCRIPT_DIR="${0:A:h}"
+BACKUP_DIR="${SCRIPT_DIR:h}/Backup"
 BREWFILE="$BACKUP_DIR/Brewfile"
 CARGOFILE="$BACKUP_DIR/Cargofile"
 FISHFILE="$BACKUP_DIR/Fishfile"

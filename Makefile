@@ -1,39 +1,52 @@
 DOT_SCRIPTS = ./scripts
-STOW_PACKAGES = aria2 bash claude config czrc vim zsh
+
+# Packages whose contents land directly in $HOME (leading-dot files at top level)
+STOW_HOME    = bash czrc vim zsh
+# Packages whose contents land under a nested target dir (flat package layout)
+STOW_ARIA2   = aria2
+STOW_CLAUDE  = claude
+STOW_CONFIG  = config
 
 .PHONY: bootstrap backup install update install-links uninstall-links relink symlinks-check
 
 bootstrap:
 	@echo "~>> [[ Bootstrapping fresh machine ]] <<~"
 	@echo
-	@bash -c $(DOT_SCRIPTS)/bootstrap.sh
+	@$(DOT_SCRIPTS)/bootstrap.sh
 
 update:
 	@echo "~>> [[ Updating ]] <<~"
 	@echo
-	@bash -c $(DOT_SCRIPTS)/update.sh
+	@$(DOT_SCRIPTS)/update.sh
 
 backup:
 	@echo "~>> [[ Backing up ]] <<~"
 	@echo
-	@bash -c $(DOT_SCRIPTS)/backup.sh
+	@$(DOT_SCRIPTS)/backup.sh
 
 install:
 	@echo "~>> [[ Installing ]] <<~"
 	@echo
-	@bash -c $(DOT_SCRIPTS)/install.sh
+	@$(DOT_SCRIPTS)/install.sh
 
 install-links:
-	@echo "~>> [[ Stowing packages into \$$HOME ]] <<~"
+	@echo "~>> [[ Stowing packages ]] <<~"
 	@echo
-	stow -v -t $(HOME) $(STOW_PACKAGES)
+	@mkdir -p $(HOME)/.aria2 $(HOME)/.claude $(HOME)/.config
+	stow -v -t $(HOME)          $(STOW_HOME)
+	stow -v -t $(HOME)/.aria2   $(STOW_ARIA2)
+	stow -v -t $(HOME)/.claude  $(STOW_CLAUDE)
+	stow -v -t $(HOME)/.config  $(STOW_CONFIG)
 
 uninstall-links:
-	@echo "~>> [[ Unstowing packages from \$$HOME ]] <<~"
+	@echo "~>> [[ Unstowing packages ]] <<~"
 	@echo
-	stow -v -D -t $(HOME) $(STOW_PACKAGES)
+	stow -v -D -t $(HOME)          $(STOW_HOME)
+	stow -v -D -t $(HOME)/.aria2   $(STOW_ARIA2)
+	stow -v -D -t $(HOME)/.claude  $(STOW_CLAUDE)
+	stow -v -D -t $(HOME)/.config  $(STOW_CONFIG)
 
 relink: uninstall-links install-links
 
 symlinks-check:
-	@bash -c $(DOT_SCRIPTS)/check-links.sh
+	@$(DOT_SCRIPTS)/check-links.sh

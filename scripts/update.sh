@@ -1,4 +1,8 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
+
+readonly SCRIPT_DIR="${0:A:h}"
+readonly REPO_DIR="${SCRIPT_DIR:h}"
+readonly BREWFILE="$REPO_DIR/Backup/Brewfile"
 
 readonly RED=$'\033[31m'
 readonly GREEN=$'\033[32m'
@@ -66,9 +70,8 @@ fi
 
 if command -v cargo >/dev/null 2>&1; then
     println "Updating Rust Packages"
-    # shellcheck disable=SC2207  # word splitting on newline-separated crate names is intentional
-    crates=( $(cargo install --list | grep -E '^[a-z0-9_-]+ v[0-9.]+:$' | cut -f1 -d' ') )
-    if [ "${#crates[@]}" -gt 0 ]; then
+    crates=( ${(f)"$(cargo install --list | grep -E '^[a-z0-9_-]+ v[0-9.]+:$' | cut -f1 -d' ')"} )
+    if (( ${#crates[@]} > 0 )); then
         track "Rust" cargo install "${crates[@]}"
     else
         SUCCEEDED+=("Rust")
@@ -100,7 +103,7 @@ fi
 
 if command -v brew >/dev/null 2>&1; then
     println "Refreshing Brewfile"
-    track "Brewfile" brew bundle dump --describe --force --file="$HOME/Backup/Brewfile"
+    track "Brewfile" brew bundle dump --describe --force --file="$BREWFILE"
 fi
 
 printf '\n%s%s==> Summary%s\n' "$BLUE" "$BOLD" "$CLEAR"

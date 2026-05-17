@@ -37,17 +37,19 @@ All four scripts live in [`scripts/`](scripts) and share a small set of helpers 
 
 ### Stow packages
 
-Each top-level directory is a stow package:
+Each top-level directory is a stow package. Most stow into `$HOME`; the three that target nested XDG-style dirs (`aria2`, `claude`, `config`) get an explicit `--target` so the layout in this repo stays flat (no `config/.config/` doubling).
 
-| Package | Symlinks into |
-| --- | --- |
-| `aria2/` | `~/.aria2/aria2.conf` |
-| `bash/` | `~/.bashrc` |
-| `claude/` | `~/.claude/settings.json` |
-| `config/` | `~/.config/{alacritty,fish,ghostty,helix,kitty,lazygit,lf,starship,tealdeer,tmux,xplr,zellij,git}/...` |
-| `czrc/` | `~/.czrc` |
-| `vim/` | `~/.vimrc`, `~/.ideavimrc` |
-| `zsh/` | `~/.zshrc` |
+| Package | Stow target | Resulting symlinks |
+| --- | --- | --- |
+| `aria2/` | `~/.aria2` | `~/.aria2/aria2.conf` |
+| `bash/` | `~` | `~/.bashrc` |
+| `claude/` | `~/.claude` | `~/.claude/settings.json` |
+| `config/` | `~/.config` | `~/.config/{alacritty,fish,ghostty,helix,kitty,lazygit,lf,starship,tealdeer,tmux,xplr,zellij,git}/...` |
+| `czrc/` | `~` | `~/.czrc` |
+| `vim/` | `~` | `~/.vimrc`, `~/.ideavimrc` |
+| `zsh/` | `~` | `~/.zshrc` |
+
+Scripts under `scripts/` are written in zsh (`#!/usr/bin/env zsh`); the lint workflow runs `zsh -n` on each to catch syntax errors.
 
 ## Local Settings
 
