@@ -36,4 +36,4 @@ jobs:
           else
             cp Backup/Brewfile /tmp/Brewfile-ci
           fi
-          brew bundle install --no-upgrade --no-cleanup --file=/tmp/Brewfile-ci
+          brew bundle install --no-upgrade --file=/tmp/Brewfile-ci
