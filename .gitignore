@@ -118,3 +118,8 @@ bin
 ..zshrc.un~
 /.gemini
 /.gk
+.cagent/
+.config/cagent/
+.config/raycast-x/
+.tradingagents/
+.vscode-shared/

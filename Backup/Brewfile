@@ -1,81 +1,108 @@
-tap "buo/cask-upgrade"
-tap "homebrew/bundle"
+tap "apple/apple"
+tap "brewforge/chinese"
+tap "brewforge/extras"
+tap "homebrew/cask"
+tap "homebrew/core"
+# Text-based UI library
+brew "ncurses"
+# Aquarium animation in ASCII art
+brew "asciiquarium"
+# Cryptography and SSL/TLS Toolkit
+brew "openssl@3"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
 # Yet another cross-platform graphical process/system monitor
 brew "bottom"
-# GNU File, Shell, and Text utilities
-brew "coreutils"
+# Cross-platform make
+brew "cmake"
 # Get a file from an HTTP, HTTPS or FTP server
 brew "curl"
-# Modern, maintained replacement for 'ls'
+# Pack, ship and run any application as a lightweight container
+brew "docker"
+# Isolated development environments using Docker
+brew "docker-compose"
+# Modern, maintained replacement for ls
 brew "eza"
 # Simple, fast and user-friendly alternative to find
 brew "fd"
-# Text-based UI library
-brew "ncurses"
-# User-friendly command-line shell for UNIX-like operating systems
-brew "fish"
-# Plugin manager for the Fish shell
-brew "fisher"
 # Command-line fuzzy finder written in Go
 brew "fzf"
+# Open-source, cross-platform JavaScript runtime environment
+brew "node"
+# Interact with Google Gemini AI models from the command-line
+brew "gemini-cli"
 # GitHub command-line tool
 brew "gh"
 # Syntax-highlighting pager for git and diff output
 brew "git-delta"
-# Blazing fast terminal-ui for git written in rust
-brew "gitui"
 # Open source programming language to build simple/reliable/efficient software
 brew "go"
-# Tools and libraries to manipulate images in many formats
+# Post-modern modal text editor
+brew "helix"
+# Tools and libraries to manipulate images in select formats
 brew "imagemagick"
 # Simple terminal UI for git commands
 brew "lazygit"
-# Terminal file manager
-brew "lf"
+# May the code be with you
+brew "leetcode-cli"
+# Next-gen compiler infrastructure
+brew "llvm"
+# Parsing Expression Grammars For Lua
+brew "lpeg"
 # Mac App Store command-line interface
 brew "mas"
-# Ambitious Vim-fork focused on extensibility and agility
-brew "neovim", args: ["HEAD"]
-# Platform built on V8 to build network applications
-brew "node"
 # Development kit for the Java programming language
 brew "openjdk"
 # Painless compression and decompression for your terminal
 brew "ouch"
+# Execute binaries from Python packages in isolated environments
+brew "pipx"
+# Package compiler and linker metadata toolkit
+brew "pkgconf"
+# Rsync for cloud storage
+brew "rclone"
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
 # Powerful, clean, object-oriented scripting language
 brew "ruby"
-# Safe, concurrent, practical language
-brew "rust"
+# Static analysis and lint tool, for (ba)sh scripts
+brew "shellcheck"
 # Cross-shell prompt for astronauts
 brew "starship"
 # Very fast implementation of tldr in Rust
 brew "tealdeer"
 # Terminal multiplexer
 brew "tmux"
-# Command-line interface for Vercel
-brew "vercel-cli"
 # Generator for LS_COLORS with support for multiple color themes
 brew "vivid"
 # Internet file retriever
 brew "wget"
-# Hackable, minimal, fast TUI file explorer
-brew "xplr"
+# Blazing fast terminal file manager written in Rust, based on async I/O
+brew "yazi"
+# Pluggable terminal workspace, with terminal multiplexer as the base feature
+brew "zellij"
 # Shell extension to navigate your filesystem faster
 brew "zoxide"
-# GPU-accelerated terminal emulator
-cask "alacritty"
+# Fish-like fast/unobtrusive autosuggestions for zsh
+brew "zsh-autosuggestions"
+# Additional completion definitions for zsh
+brew "zsh-completions"
+# Fish shell like syntax highlighting for zsh
+brew "zsh-syntax-highlighting"
+# Stand alone ad blocker
+cask "adguard"
+# Transfer files from and to an Android smartphone
+cask "android-file-transfer"
 # Cloud storage service
 cask "baidunetdisk"
 # E-books management software
 cask "calibre"
-# Tool to remove unnecessary files and folders from disk Chinese edition
-cask "cleanmymac-zh"
-# API documentation browser and code snippet manager
-cask "dash"
+# Rule based proxy base on Clash
+cask "brewforge/chinese/clashx-meta"
+# Anthropic's official Claude AI desktop app
+cask "claude"
+# Terminal-based AI coding assistant
+cask "claude-code"
 # All-in-one toolbox for developers
 cask "devutils"
 # Voice and text chat software
@@ -84,56 +111,127 @@ cask "discord"
 cask "downie"
 # Download manager with a torrent client
 cask "folx"
-# Typeface made for developers
-cask "font-jetbrains-mono"
-# Developer targeted fonts with a high number of glyphs
 cask "font-jetbrains-mono-nerd-font"
+# Terminal emulator that uses platform-native UI and GPU acceleration
+cask "ghostty@tip"
 # Web browser
 cask "google-chrome"
 # Client for the Google Drive storage service
 cask "google-drive"
-# Terminal emulator as alternative to Apple's Terminal app
-cask "iterm2-beta"
-# Spot and merge differences in text and image files or folders
-cask "kaleidoscope"
+# Native desktop AI assistant from Google
+cask "google-gemini"
+# Tool for multi-language users
+cask "input-source-pro"
 # File archiver
 cask "keka"
 # Media player
 cask "movist-pro"
 # Converts and edits video, audio or image files
 cask "permute"
-# QuickLook generator for Markdown files
+# Quick Look generator for Markdown files
 cask "qlmarkdown"
+# 电脑高效拍档，一键存爽快看
+cask "brewforge/chinese/quarkclouddrive"
 # HTTP client that helps testing and describing APIs
 cask "rapidapi"
 # Control your tools with a few keystrokes
 cask "raycast"
 # Team communication and collaboration software
 cask "slack"
+# Sound and audio controller
+cask "soundsource"
 # Quicklook extension for source files
 cask "syntax-highlight"
 # Messaging app with a focus on speed and security
 cask "telegram"
 # VPN and WiFi proxy
 cask "thunder"
+# Web browser focusing on security
+cask "tor-browser"
 # File transfer application
 cask "transmit"
 # Open-source code editor
 cask "visual-studio-code"
 # Video communication and virtual meeting platform
 cask "webex"
+# Free messaging and calling application
+cask "wechat"
 # Video communication and virtual meeting platform
 cask "zoom"
-mas "Craft", id: 1487937127
+mas "Capital One Shopping", id: 1477110326
+mas "CardPointers", id: 1472875808
+mas "Craft/ Write docs, AI editing", id: 0
 mas "Endel", id: 1484348796
-mas "Infuse", id: 1136220934
+mas "Infuse", id: 0
 mas "Keynote", id: 409183694
 mas "LINE", id: 539883307
+mas "Noir", id: 1592917505
 mas "Numbers", id: 409203825
+mas "Numbers", id: 361304891
 mas "Pages", id: 409201541
 mas "Pixelmator Pro", id: 1289583905
-mas "Tampermonkey", id: 1482490089
+mas "Rakuten Cash Back", id: 1451893560
+mas "Reeder", id: 1529448980
+mas "Tampermonkey", id: 6738342400
 mas "TestFlight", id: 899247664
-mas "Things", id: 904280696
-mas "WeChat", id: 836500024
-mas "Xcode", id: 497799835
+vscode "aaron-bond.better-comments"
+vscode "alefragnani.project-manager"
+vscode "anthropic.claude-code"
+vscode "bmalehorn.vscode-fish"
+vscode "bradlc.vscode-tailwindcss"
+vscode "bytedance-microapp.microapp"
+vscode "christian-kohler.path-intellisense"
+vscode "dbaeumer.vscode-eslint"
+vscode "docker.docker"
+vscode "eamodio.gitlens"
+vscode "esbenp.prettier-vscode"
+vscode "foxundermoon.shell-format"
+vscode "fwcd.kotlin"
+vscode "github.vscode-github-actions"
+vscode "github.vscode-pull-request-github"
+vscode "golang.go"
+vscode "kdl-org.kdl"
+vscode "llvm-vs-code-extensions.vscode-clangd"
+vscode "lynx.lynx-studio"
+vscode "mintlify.document"
+vscode "ms-azuretools.vscode-containers"
+vscode "ms-azuretools.vscode-docker"
+vscode "ms-python.black-formatter"
+vscode "ms-python.debugpy"
+vscode "ms-python.isort"
+vscode "ms-python.python"
+vscode "ms-python.vscode-pylance"
+vscode "ms-python.vscode-python-envs"
+vscode "ms-toolsai.jupyter"
+vscode "ms-toolsai.jupyter-keymap"
+vscode "ms-toolsai.jupyter-renderers"
+vscode "ms-toolsai.vscode-jupyter-cell-tags"
+vscode "ms-toolsai.vscode-jupyter-slideshow"
+vscode "ms-vscode-remote.remote-containers"
+vscode "ms-vscode-remote.remote-ssh"
+vscode "ms-vscode-remote.remote-ssh-edit"
+vscode "ms-vscode-remote.vscode-remote-extensionpack"
+vscode "ms-vscode.cmake-tools"
+vscode "ms-vscode.cpp-devtools"
+vscode "ms-vscode.cpptools"
+vscode "ms-vscode.cpptools-extension-pack"
+vscode "ms-vscode.remote-explorer"
+vscode "ms-vscode.remote-server"
+vscode "pablodelucca.pixel-agents"
+vscode "redhat.java"
+vscode "redhat.vscode-xml"
+vscode "streetsidesoftware.code-spell-checker"
+vscode "stylelint.vscode-stylelint"
+vscode "sumneko.lua"
+vscode "tamasfe.even-better-toml"
+vscode "usernamehw.errorlens"
+vscode "vadimcn.vscode-lldb"
+vscode "vscjava.vscode-gradle"
+vscode "vscjava.vscode-java-debug"
+vscode "vscjava.vscode-java-dependency"
+vscode "vscjava.vscode-java-pack"
+vscode "vscjava.vscode-java-test"
+vscode "vscjava.vscode-maven"
+vscode "vscode-icons-team.vscode-icons"
+vscode "vscodevim.vim"
+vscode "yzhang.markdown-all-in-one"
