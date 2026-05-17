@@ -5,7 +5,7 @@
 #   2. Install Homebrew (if missing) and ensure it's on PATH
 #   3. Install GNU stow
 #   4. Move any conflicting $HOME files aside into a timestamped backup
-#   5. Stow every package into its mapped target
+#   5. Stow every package into $HOME
 #   6. Run scripts/install.sh to install brew/npm/pip/cargo/fish/tpm packages
 #      (skip with SKIP_INSTALL=1)
 #
@@ -32,16 +32,10 @@ err()  { print -r -- "${RED}✗${NC} $*" >&2; }
 SCRIPT_DIR="${0:A:h}"
 REPO_DIR="${SCRIPT_DIR:h}"
 
-typeset -A PKG_TARGET=(
-	aria2   "$HOME/.aria2"
-	bash    "$HOME"
-	claude  "$HOME/.claude"
-	config  "$HOME/.config"
-	czrc    "$HOME"
-	vim     "$HOME"
-	zsh     "$HOME"
-)
-STOW_PACKAGES=("${(@k)PKG_TARGET}")
+NON_PACKAGES=(scripts Backup .github .git)
+cd "$REPO_DIR"
+STOW_PACKAGES=( *(/N:t) )
+STOW_PACKAGES=( ${STOW_PACKAGES:|NON_PACKAGES} )
 
 # 1. Xcode Command Line Tools
 if xcode-select -p >/dev/null 2>&1; then
@@ -80,13 +74,12 @@ conflict_rels=()
 cd "$REPO_DIR"
 for pkg in "${STOW_PACKAGES[@]}"; do
 	[[ -d $pkg ]] || continue
-	target_base="${PKG_TARGET[$pkg]}"
 	while IFS= read -r -d $'\0' file; do
 		rel="${file#$pkg/}"
-		target="$target_base/$rel"
+		target="$HOME/$rel"
 		if [[ -e $target && ! -L $target ]]; then
 			conflicts+=("$target")
-			conflict_rels+=("${target#$HOME/}")
+			conflict_rels+=("$rel")
 		fi
 	done < <(find "$pkg" -type f -not -name '.DS_Store' -print0)
 done
@@ -102,17 +95,16 @@ if (( ${#conflicts} > 0 )); then
 	done
 	ok "Backed up ${#conflicts} file(s) to $BACKUP_DIR"
 else
-	ok "No conflicting files in target locations"
+	ok "No conflicting files in \$HOME"
 fi
 
-# 5. Stow each package to its mapped target
-info "Stowing packages"
-mkdir -p "$HOME/.aria2" "$HOME/.claude" "$HOME/.config"
-cd "$REPO_DIR"
-for pkg in "${STOW_PACKAGES[@]}"; do
-	[[ -d $pkg ]] || continue
-	stow -v -t "${PKG_TARGET[$pkg]}" "$pkg"
-done
+# Stow needs these to exist as real dirs (avoids tree-folding into a single
+# symlink that the next package would then collide with).
+mkdir -p "$HOME/.config" "$HOME/.aria2" "$HOME/.claude"
+
+# 5. Stow all packages
+info "Stowing ${#STOW_PACKAGES} packages into \$HOME"
+stow -v -t "$HOME" "${STOW_PACKAGES[@]}"
 ok "Symlinks created"
 
 # 6. Install packages (skippable)

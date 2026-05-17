@@ -1,8 +1,8 @@
 #!/usr/bin/env zsh
 #
-# Verify every file in every stow package has a matching symlink at the
-# package's stow target, and report any dangling dotfiles symlinks left
-# over from removed files.
+# Verify every file in every stow package has a matching symlink in $HOME
+# resolving back to the repo file. Reports orphan symlinks (whose dotfiles/
+# target was removed) as well.
 #
 # Exit 0 if everything is healthy, 1 otherwise.
 
@@ -22,16 +22,11 @@ warn() { print -r -- "${YELLOW}!${NC} $*"; }
 SCRIPT_DIR="${0:A:h}"
 REPO_DIR="${SCRIPT_DIR:h}"
 
-typeset -A PKG_TARGET=(
-	aria2   "$HOME/.aria2"
-	bash    "$HOME"
-	claude  "$HOME/.claude"
-	config  "$HOME/.config"
-	czrc    "$HOME"
-	vim     "$HOME"
-	zsh     "$HOME"
-)
-STOW_PACKAGES=("${(@k)PKG_TARGET}")
+# Auto-discover packages: every top-level dir minus these
+NON_PACKAGES=(scripts Backup .github .git)
+cd "$REPO_DIR"
+STOW_PACKAGES=( *(/N:t) )
+STOW_PACKAGES=( ${STOW_PACKAGES:|NON_PACKAGES} )
 
 typeset -i ok_count=0
 missing=()
@@ -39,14 +34,12 @@ not_symlink=()
 wrong_target=()
 broken=()
 
-info "Checking package files have matching symlinks at their stow targets"
-cd "$REPO_DIR"
+info "Checking ${#STOW_PACKAGES} packages for healthy symlinks under \$HOME"
 for pkg in "${STOW_PACKAGES[@]}"; do
 	[[ -d $pkg ]] || { warn "package dir missing: $pkg"; continue; }
-	target_base="${PKG_TARGET[$pkg]}"
 	while IFS= read -r -d $'\0' file; do
 		rel="${file#$pkg/}"
-		target="$target_base/$rel"
+		target="$HOME/$rel"
 		expected="$REPO_DIR/$file"
 
 		if [[ ! -L $target ]]; then

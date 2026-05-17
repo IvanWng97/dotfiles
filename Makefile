@@ -1,11 +1,8 @@
 DOT_SCRIPTS = ./scripts
 
-# Packages whose contents land directly in $HOME (leading-dot files at top level)
-STOW_HOME    = bash czrc vim zsh
-# Packages whose contents land under a nested target dir (flat package layout)
-STOW_ARIA2   = aria2
-STOW_CLAUDE  = claude
-STOW_CONFIG  = config
+# Auto-discover packages: every top-level dir except these
+EXCLUDE_DIRS    = scripts Backup .github .git
+STOW_PACKAGES  := $(filter-out $(EXCLUDE_DIRS),$(patsubst %/,%,$(wildcard */)))
 
 .DEFAULT_GOAL := help
 
@@ -34,24 +31,21 @@ install:  ## Install all packages from Backup/ (brew/npm/pip/cargo/fish/tpm)
 	@echo
 	@$(DOT_SCRIPTS)/install.sh
 
-install-links:  ## Stow every package into its mapped target
-	@echo "~>> [[ Stowing packages ]] <<~"
+install-links:  ## Stow every package into $HOME
+	@echo "~>> [[ Stowing $(words $(STOW_PACKAGES)) packages ]] <<~"
 	@echo
-	@mkdir -p $(HOME)/.aria2 $(HOME)/.claude $(HOME)/.config
-	stow -v -t $(HOME)          $(STOW_HOME)
-	stow -v -t $(HOME)/.aria2   $(STOW_ARIA2)
-	stow -v -t $(HOME)/.claude  $(STOW_CLAUDE)
-	stow -v -t $(HOME)/.config  $(STOW_CONFIG)
+	@mkdir -p $(HOME)/.config $(HOME)/.aria2 $(HOME)/.claude
+	stow -v -t $(HOME) $(STOW_PACKAGES)
 
 uninstall-links:  ## Remove all stowed symlinks (configs stay in repo)
-	@echo "~>> [[ Unstowing packages ]] <<~"
+	@echo "~>> [[ Unstowing $(words $(STOW_PACKAGES)) packages ]] <<~"
 	@echo
-	stow -v -D -t $(HOME)          $(STOW_HOME)
-	stow -v -D -t $(HOME)/.aria2   $(STOW_ARIA2)
-	stow -v -D -t $(HOME)/.claude  $(STOW_CLAUDE)
-	stow -v -D -t $(HOME)/.config  $(STOW_CONFIG)
+	stow -v -D -t $(HOME) $(STOW_PACKAGES)
 
 relink: uninstall-links install-links  ## Re-run unstow then stow (after adding files)
 
 symlinks-check:  ## Verify every package file has a healthy symlink at its target
 	@$(DOT_SCRIPTS)/check-links.sh
+
+print-packages:  ## Print the auto-discovered package list
+	@echo $(STOW_PACKAGES)

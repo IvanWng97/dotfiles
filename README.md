@@ -37,17 +37,23 @@ All four scripts live in [`scripts/`](scripts) and share a small set of helpers 
 
 ### Stow packages
 
-Each top-level directory is a stow package. Most stow into `$HOME`; the three that target nested XDG-style dirs (`aria2`, `claude`, `config`) get an explicit `--target` so the layout in this repo stays flat (no `config/.config/` doubling).
+Each tool gets its own top-level package. All packages stow into `$HOME`; each one carries the right `.config/`, `.aria2/`, etc. structure inside it so stow puts files in the correct XDG location.
 
-| Package | Stow target | Resulting symlinks |
-| --- | --- | --- |
-| `aria2/` | `~/.aria2` | `~/.aria2/aria2.conf` |
-| `bash/` | `~` | `~/.bashrc` |
-| `claude/` | `~/.claude` | `~/.claude/settings.json` |
-| `config/` | `~/.config` | `~/.config/{alacritty,fish,ghostty,helix,kitty,lazygit,lf,starship,tealdeer,tmux,xplr,zellij,git}/...` |
-| `czrc/` | `~` | `~/.czrc` |
-| `vim/` | `~` | `~/.vimrc`, `~/.ideavimrc` |
-| `zsh/` | `~` | `~/.zshrc` |
+```
+~/dotfiles/
+  alacritty/.config/alacritty/...
+  fish/.config/fish/...
+  nvim/.config/nvim/...
+  ...                              ← 13 XDG packages
+  aria2/.aria2/aria2.conf
+  claude/.claude/settings.json
+  bash/.bashrc
+  czrc/.czrc
+  vim/.vimrc  vim/.ideavimrc
+  zsh/.zshrc
+```
+
+The Makefile auto-discovers packages (every top-level dir except `scripts/`, `Backup/`, `.github/`, `.git/`) and runs a single `stow -v -t ~ <packages...>` call. Run `make print-packages` to see the current list.
 
 Scripts under `scripts/` are written in zsh (`#!/usr/bin/env zsh`); the lint workflow runs `zsh -n` on each to catch syntax errors.
 
