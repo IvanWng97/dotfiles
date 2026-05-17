@@ -1,0 +1,76 @@
+name: bootstrap
+
+on:
+  push:
+    paths:
+      - 'scripts/**'
+      - 'Makefile'
+      - '*/.config/**'
+      - '*/.aria2/**'
+      - '*/.claude/**'
+      - 'bash/.bashrc'
+      - 'czrc/.czrc'
+      - 'vim/**'
+      - 'zsh/.zshrc'
+      - '.github/workflows/bootstrap.yml'
+  pull_request:
+    paths:
+      - 'scripts/**'
+      - 'Makefile'
+      - '*/.config/**'
+      - '*/.aria2/**'
+      - '*/.claude/**'
+      - 'bash/.bashrc'
+      - 'czrc/.czrc'
+      - 'vim/**'
+      - 'zsh/.zshrc'
+      - '.github/workflows/bootstrap.yml'
+  workflow_dispatch:
+
+jobs:
+  bootstrap:
+    runs-on: macos-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Environment info
+        run: |
+          sw_vers
+          echo "---"
+          brew --version
+          echo "---"
+          zsh --version
+
+      - name: Run bootstrap (SKIP_INSTALL=1)
+        env:
+          SKIP_INSTALL: '1'
+        run: |
+          # Bootstrap clones into ~/dotfiles in normal use; here the checkout
+          # is at $GITHUB_WORKSPACE. Run it from there — paths resolve via
+          # ${0:A:h} so the repo location doesn't matter.
+          make bootstrap
+
+      - name: Verify health
+        run: make doctor
+
+      - name: Inspect created symlinks
+        run: |
+          echo "--- Top-level dotfile symlinks ---"
+          ls -la "$HOME" | grep -E '^l' | head -20 || true
+          echo ""
+          echo "--- ~/.config symlinks ---"
+          ls -la "$HOME/.config" | grep -E '^l' | head -20 || true
+          echo ""
+          echo "--- ~/.claude symlinks ---"
+          ls -la "$HOME/.claude" 2>/dev/null | grep -E '^l' | head -10 || true
+
+      - name: Re-run bootstrap (idempotency check)
+        env:
+          SKIP_INSTALL: '1'
+        run: |
+          # Second run should be a no-op — no conflicts, no new files.
+          make bootstrap
+
+      - name: Final symlinks-check
+        run: make symlinks-check
