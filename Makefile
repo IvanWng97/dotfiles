@@ -1,5 +1,5 @@
 DOT_SCRIPTS = ./scripts
-STOW_PACKAGES = aria2 bash config czrc vim zsh
+STOW_PACKAGES = aria2 bash claude config czrc vim zsh
 
 .PHONY: backup install update install-links uninstall-links relink
 
