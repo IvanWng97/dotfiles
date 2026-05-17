@@ -30,6 +30,7 @@ cd ~/dotfiles && make bootstrap
 | `make uninstall-links` | Remove the symlinks (configs stay safe in `~/dotfiles/`). |
 | `make relink` | `uninstall-links` then `install-links` — useful after adding a new file to a package. |
 | `make symlinks-check` | Verify every package file has a matching, correctly-resolved symlink in `$HOME`; reports orphans too. Exits non-zero on issues. |
+| `make doctor` | Run every health check at once: zsh syntax on each script, symlinks-check, Brewfile parses, git working tree clean. |
 | `make update` | Upgrades brew/npm/pipx/cargo/mas/tmux packages and re-dumps `Backup/Brewfile` so it matches reality. |
 | `make backup` | Re-dumps every package list into `Backup/` for committing. |
 
@@ -56,6 +57,15 @@ Each tool gets its own top-level package. All packages stow into `$HOME`; each o
 The Makefile auto-discovers packages (every top-level dir except `scripts/`, `Backup/`, `.github/`, `.git/`) and runs a single `stow -v -t ~ <packages...>` call. Run `make print-packages` to see the current list.
 
 Scripts under `scripts/` are written in zsh (`#!/usr/bin/env zsh`); the lint workflow runs `zsh -n` on each to catch syntax errors.
+
+### Pre-commit hooks (optional)
+
+The same checks the CI runs (`gitleaks`, `actionlint`, `zsh -n`, plus trailing-whitespace / EOF / YAML / merge-conflict) are available as pre-commit hooks. Opt-in per clone:
+
+```sh
+brew install pre-commit
+pre-commit install
+```
 
 ## Local Settings
 
@@ -97,6 +107,10 @@ Everything is [Dracula](https://draculatheme.com)!
 ## Author
 
 👤 **Ivan** — [@IvanWng97](https://github.com/IvanWng97)
+
+## License
+
+[MIT](LICENSE) — feel free to fork, copy, and rip out whatever's useful.
 
 ## Show your support
 

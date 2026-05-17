@@ -146,8 +146,6 @@ cask "syntax-highlight"
 cask "telegram"
 # VPN and WiFi proxy
 cask "thunder"
-# Web browser focusing on security
-cask "tor-browser"
 # File transfer application
 cask "transmit"
 # Open-source code editor

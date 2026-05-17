@@ -6,7 +6,7 @@ STOW_PACKAGES  := $(filter-out $(EXCLUDE_DIRS),$(patsubst %/,%,$(wildcard */)))
 
 .DEFAULT_GOAL := help
 
-.PHONY: help bootstrap backup install update install-links uninstall-links relink symlinks-check
+.PHONY: help bootstrap backup install update install-links uninstall-links relink symlinks-check doctor print-packages
 
 help:  ## Show this help
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  \033[36m%-18s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -46,6 +46,9 @@ relink: uninstall-links install-links  ## Re-run unstow then stow (after adding 
 
 symlinks-check:  ## Verify every package file has a healthy symlink at its target
 	@$(DOT_SCRIPTS)/check-links.sh
+
+doctor:  ## Run all repo health checks (script syntax, symlinks, Brewfile, git state)
+	@$(DOT_SCRIPTS)/doctor.sh
 
 print-packages:  ## Print the auto-discovered package list
 	@echo $(STOW_PACKAGES)

@@ -1,0 +1,29 @@
+# Opt-in via: brew install pre-commit && pre-commit install
+# Runs the same checks as CI but at commit time.
+
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.21.2
+    hooks:
+      - id: gitleaks
+
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.4
+    hooks:
+      - id: actionlint
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-yaml
+      - id: check-merge-conflict
+
+  - repo: local
+    hooks:
+      - id: zsh-syntax
+        name: zsh -n
+        entry: zsh -n
+        language: system
+        files: ^scripts/.*\.sh$
