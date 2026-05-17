@@ -1,0 +1,39 @@
+name: brewfile
+
+on:
+  push:
+    paths:
+      - 'Backup/Brewfile'
+      - '.github/workflows/brewfile.yml'
+  pull_request:
+    paths:
+      - 'Backup/Brewfile'
+      - '.github/workflows/brewfile.yml'
+  workflow_dispatch:
+
+jobs:
+  bundle-install:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Show brew & Brewfile info
+        run: |
+          brew --version
+          echo "---"
+          wc -l Backup/Brewfile
+          echo "---"
+          head -20 Backup/Brewfile
+
+      - name: brew bundle install
+        run: |
+          set -e
+          # Strip mas entries — the runner isn't signed into App Store
+          if grep -q '^mas ' Backup/Brewfile; then
+            grep -v '^mas ' Backup/Brewfile > /tmp/Brewfile-ci
+            echo "Stripped $(grep -c '^mas ' Backup/Brewfile) mas entries"
+          else
+            cp Backup/Brewfile /tmp/Brewfile-ci
+          fi
+          brew bundle install --no-upgrade --no-cleanup --file=/tmp/Brewfile-ci
