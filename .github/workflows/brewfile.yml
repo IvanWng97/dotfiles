@@ -26,6 +26,9 @@ jobs:
           echo "---"
           head -20 Backup/Brewfile
 
+      - name: brew update (refresh catalog)
+        run: brew update --quiet
+
       - name: brew bundle install
         run: |
           set -e
