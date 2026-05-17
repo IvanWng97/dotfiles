@@ -1,7 +1,7 @@
 DOT_SCRIPTS = ./scripts
 STOW_PACKAGES = aria2 bash claude config czrc vim zsh
 
-.PHONY: bootstrap backup install update install-links uninstall-links relink
+.PHONY: bootstrap backup install update install-links uninstall-links relink symlinks-check
 
 bootstrap:
 	@echo "~>> [[ Bootstrapping fresh machine ]] <<~"
@@ -34,3 +34,6 @@ uninstall-links:
 	stow -v -D -t $(HOME) $(STOW_PACKAGES)
 
 relink: uninstall-links install-links
+
+symlinks-check:
+	@bash -c $(DOT_SCRIPTS)/check-links.sh

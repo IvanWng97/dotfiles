@@ -29,6 +29,7 @@ cd ~/dotfiles && make bootstrap
 | `make install-links` | Re-run `stow` to (re)create symlinks under `$HOME`. |
 | `make uninstall-links` | Remove the symlinks (configs stay safe in `~/dotfiles/`). |
 | `make relink` | `uninstall-links` then `install-links` — useful after adding a new file to a package. |
+| `make symlinks-check` | Verify every package file has a matching, correctly-resolved symlink in `$HOME`; reports orphans too. Exits non-zero on issues. |
 | `make update` | Upgrades brew/npm/pipx/cargo/fisher/mas/tmux packages and re-dumps `Backup/Brewfile` so it matches reality. |
 | `make backup` | Re-dumps every package list into `Backup/` for committing. |
 
