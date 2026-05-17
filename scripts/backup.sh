@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-BREWFILE=~/Backup/Brewfile
-CARGOFILE=~/Backup/Cargofile
-FISHFILE=~/Backup/Fishfile
-NPMFILE=~/Backup/Npmfile
-PIPFILE=~/Backup/Pipfile
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BACKUP_DIR="$SCRIPT_DIR/../Backup"
+BREWFILE="$BACKUP_DIR/Brewfile"
+CARGOFILE="$BACKUP_DIR/Cargofile"
+FISHFILE="$BACKUP_DIR/Fishfile"
+NPMFILE="$BACKUP_DIR/Npmfile"
+PIPFILE="$BACKUP_DIR/Pipfile"
 
-mkdir -p ~/Backup
+mkdir -p "$BACKUP_DIR"
 
 echo "---------------------------------"
 echo "- Deleting old Backup Files     -"
