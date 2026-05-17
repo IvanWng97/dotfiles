@@ -56,14 +56,9 @@ jobs:
 
       - name: Inspect created symlinks
         run: |
-          echo "--- Top-level dotfile symlinks ---"
-          ls -la "$HOME" | grep -E '^l' | head -20 || true
-          echo ""
-          echo "--- ~/.config symlinks ---"
-          ls -la "$HOME/.config" | grep -E '^l' | head -20 || true
-          echo ""
-          echo "--- ~/.claude symlinks ---"
-          ls -la "$HOME/.claude" 2>/dev/null | grep -E '^l' | head -10 || true
+          count=$(find "$HOME" -maxdepth 5 -type l -lname '*dotfiles*' 2>/dev/null | wc -l | tr -d ' ')
+          echo "Created $count symlinks pointing into the dotfiles repo:"
+          find "$HOME" -maxdepth 5 -type l -lname '*dotfiles*' 2>/dev/null | head -30 || true
 
       - name: Re-run bootstrap (idempotency check)
         env:
