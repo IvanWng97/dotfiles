@@ -27,6 +27,10 @@ on:
       - '.github/workflows/bootstrap.yml'
   workflow_dispatch:
 
+concurrency:
+  group: bootstrap-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   bootstrap:
     runs-on: macos-latest

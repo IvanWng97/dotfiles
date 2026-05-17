@@ -11,6 +11,10 @@ on:
       - '.github/workflows/brewfile.yml'
   workflow_dispatch:
 
+concurrency:
+  group: brewfile-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   bundle-install:
     runs-on: macos-latest
@@ -25,6 +29,16 @@ jobs:
           wc -l Backup/Brewfile
           echo "---"
           head -20 Backup/Brewfile
+
+      - name: Cache Homebrew downloads
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Library/Caches/Homebrew/downloads
+            ~/Library/Caches/Homebrew/Cask
+          key: ${{ runner.os }}-brew-${{ hashFiles('Backup/Brewfile') }}
+          restore-keys: |
+            ${{ runner.os }}-brew-
 
       - name: brew update (refresh catalog)
         run: brew update --quiet

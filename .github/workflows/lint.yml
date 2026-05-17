@@ -4,6 +4,10 @@ on:
   push:
   pull_request:
 
+concurrency:
+  group: lint-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   zsh-syntax:
     runs-on: ubuntu-latest

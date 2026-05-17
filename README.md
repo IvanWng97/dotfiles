@@ -1,4 +1,12 @@
 <h1 align="center">Welcome to Ivan's dotfiles 👋</h1>
+
+<p align="center">
+  <a href="https://github.com/IvanWng97/dotfiles/actions/workflows/lint.yml"><img src="https://github.com/IvanWng97/dotfiles/actions/workflows/lint.yml/badge.svg" alt="lint"></a>
+  <a href="https://github.com/IvanWng97/dotfiles/actions/workflows/bootstrap.yml"><img src="https://github.com/IvanWng97/dotfiles/actions/workflows/bootstrap.yml/badge.svg" alt="bootstrap"></a>
+  <a href="https://github.com/IvanWng97/dotfiles/actions/workflows/brewfile.yml"><img src="https://github.com/IvanWng97/dotfiles/actions/workflows/brewfile.yml/badge.svg" alt="brewfile"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License"></a>
+</p>
+
 💻 ghostty, neovim, zsh, tmux, starship, lazygit, homebrew — my whole world
 <div align="center">
 <img width="720" alt="IMG_1059" src="https://user-images.githubusercontent.com/39482599/222035732-e245becc-dd67-4d42-8c8c-28a2592d4d13.png">
