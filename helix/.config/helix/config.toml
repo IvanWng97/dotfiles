@@ -2,6 +2,23 @@ theme = "dracula"
 
 [editor]
 line-number = "relative"
+scrolloff = 5
+cursorline = true
+color-modes = true
+bufferline = "multiple"
+default-yank-register = "+"
+
+[editor.search]
+smart-case = true
+wrap-around = true
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[editor.indent-guides]
+render = true
 
 [editor.statusline]
 left = ["mode", "spinner", "diagnostics"]
@@ -20,11 +37,27 @@ G = "goto_file_end"
 V = ["select_mode", "extend_to_line_bounds"]
 D = ["extend_to_line_end", "yank_main_selection_to_clipboard", "delete_selection"]
 
-
-# Uncanny valley stuff, this makes w and b behave as they do Vim
+# Vim-style word motions
 w = ["move_next_word_start", "move_char_right", "collapse_selection"]
 W = ["move_next_long_word_start", "move_char_right", "collapse_selection"]
 e = ["move_next_word_end", "collapse_selection"]
 E = ["move_next_long_word_end", "collapse_selection"]
 b = ["move_prev_word_start", "collapse_selection"]
 B = ["move_prev_long_word_start", "collapse_selection"]
+
+# Alt-key shortcuts ported from .vimrc
+"A-s" = ":write"
+"A-q" = ":quit"
+"A-w" = ":buffer-close"
+"A-o" = "file_picker"
+"A-e" = "file_picker"
+"A-g" = "global_search"
+"A-f" = "buffer_picker"
+"A-p" = "command_palette"
+"A-/" = "toggle_comments"
+"A-a" = "select_all"
+
+[keys.insert]
+"A-s" = ["normal_mode", ":write"]
+"A-q" = ["normal_mode", ":quit"]
+"A-/" = ["normal_mode", "toggle_comments"]
