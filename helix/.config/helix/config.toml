@@ -8,7 +8,6 @@ color-modes = true
 bufferline = "multiple"
 default-yank-register = "+"
 true-color = true
-rulers = [80, 120]
 gutters = ["diagnostics", "spacer", "line-numbers", "spacer", "diff"]
 
 [editor.auto-save]
