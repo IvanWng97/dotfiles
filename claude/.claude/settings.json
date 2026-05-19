@@ -22,5 +22,45 @@
       }
     }
   },
-  "agentPushNotifEnabled": true
+  "agentPushNotifEnabled": true,
+  "permissions": {
+    "defaultMode": "acceptEdits",
+    "allow": [
+      "Bash(brew *)",
+      "Bash(git *)",
+      "Bash(make *)",
+      "Bash(shellcheck *)",
+      "Bash(actionlint *)",
+      "Bash(stow *)",
+      "Bash(pip3 *)",
+      "Bash(pipx *)",
+      "Bash(uv tool *)",
+      "Bash(command -v *)",
+      "Bash(bash -n *)",
+      "Bash(zsh -n *)",
+      "Bash(gh pr *)",
+      "Bash(gh run *)",
+      "Bash(gh repo *)",
+      "Bash(gh issue *)",
+      "Read(//opt/homebrew/**)",
+      "Read(//usr/local/bin/**)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)"
+    ],
+    "deny": [
+      "Bash(rm -rf /*)",
+      "Bash(rm -rf ~*)",
+      "Bash(git push --force*)",
+      "Bash(git push -f *)",
+      "Bash(git reset --hard*)",
+      "Bash(sudo *)",
+      "Bash(curl * | sh)",
+      "Bash(curl * | bash)",
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/credentials)",
+      "Read(**/.env)",
+      "Read(**/.env.local)"
+    ]
+  }
 }
