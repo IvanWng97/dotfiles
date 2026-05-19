@@ -7,6 +7,23 @@ cursorline = true
 color-modes = true
 bufferline = "multiple"
 default-yank-register = "+"
+true-color = true
+rulers = [80, 120]
+gutters = ["diagnostics", "spacer", "line-numbers", "spacer", "diff"]
+
+[editor.auto-save]
+focus-lost = true
+
+[editor.soft-wrap]
+enable = true
+wrap-at-text-width = true
+
+[editor.whitespace.render]
+space = "none"
+tab = "all"
+
+[editor.smart-tab]
+enable = true
 
 [editor.search]
 smart-case = true
