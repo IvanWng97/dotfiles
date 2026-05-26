@@ -1,9 +1,7 @@
 {
   "agentPushNotifEnabled": true,
-  "env": {
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
-  },
   "enabledPlugins": {
+    "andrej-karpathy-skills@karpathy-skills": true,
     "claude-hud@claude-hud": true,
     "claude-md-management@claude-plugins-official": true,
     "code-review@claude-plugins-official": true,
@@ -15,10 +13,19 @@
     "rust-analyzer-lsp@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true
   },
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
   "extraKnownMarketplaces": {
     "claude-hud": {
       "source": {
         "repo": "jarrodwatts/claude-hud",
+        "source": "github"
+      }
+    },
+    "karpathy-skills": {
+      "source": {
+        "repo": "forrestchang/andrej-karpathy-skills",
         "source": "github"
       }
     }
