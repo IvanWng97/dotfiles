@@ -9,6 +9,7 @@
     "feature-dev@claude-plugins-official": true,
     "github@claude-plugins-official": true,
     "kotlin-lsp@claude-plugins-official": true,
+    "pr-review-toolkit@claude-plugins-official": true,
     "pyright-lsp@claude-plugins-official": true,
     "rust-analyzer-lsp@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true
@@ -33,10 +34,19 @@
   "hooks": {
     "Notification": [
       {
-        "_ascii_agents": true,
         "hooks": [
           {
             "command": "ascii-agents-hook",
+            "type": "command"
+          }
+        ],
+        "matcher": ".*"
+      },
+      {
+        "_pixtuoid": true,
+        "hooks": [
+          {
+            "command": "pixtuoid-hook",
             "type": "command"
           }
         ],
@@ -45,10 +55,19 @@
     ],
     "PostToolUse": [
       {
-        "_ascii_agents": true,
         "hooks": [
           {
             "command": "ascii-agents-hook",
+            "type": "command"
+          }
+        ],
+        "matcher": ".*"
+      },
+      {
+        "_pixtuoid": true,
+        "hooks": [
+          {
+            "command": "pixtuoid-hook",
             "type": "command"
           }
         ],
@@ -57,10 +76,19 @@
     ],
     "PreToolUse": [
       {
-        "_ascii_agents": true,
         "hooks": [
           {
             "command": "ascii-agents-hook",
+            "type": "command"
+          }
+        ],
+        "matcher": ".*"
+      },
+      {
+        "_pixtuoid": true,
+        "hooks": [
+          {
+            "command": "pixtuoid-hook",
             "type": "command"
           }
         ],
@@ -69,10 +97,19 @@
     ],
     "SessionEnd": [
       {
-        "_ascii_agents": true,
         "hooks": [
           {
             "command": "ascii-agents-hook",
+            "type": "command"
+          }
+        ],
+        "matcher": ".*"
+      },
+      {
+        "_pixtuoid": true,
+        "hooks": [
+          {
+            "command": "pixtuoid-hook",
             "type": "command"
           }
         ],
@@ -81,10 +118,19 @@
     ],
     "SessionStart": [
       {
-        "_ascii_agents": true,
         "hooks": [
           {
             "command": "ascii-agents-hook",
+            "type": "command"
+          }
+        ],
+        "matcher": ".*"
+      },
+      {
+        "_pixtuoid": true,
+        "hooks": [
+          {
+            "command": "pixtuoid-hook",
             "type": "command"
           }
         ],
