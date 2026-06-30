@@ -1,5 +1,7 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "agentPushNotifEnabled": true,
+  "cleanupPeriodDays": 90,
   "enabledPlugins": {
     "andrej-karpathy-skills@karpathy-skills": true,
     "claude-hud@claude-hud": true,
@@ -34,15 +36,6 @@
   "hooks": {
     "Notification": [
       {
-        "hooks": [
-          {
-            "command": "ascii-agents-hook",
-            "type": "command"
-          }
-        ],
-        "matcher": ".*"
-      },
-      {
         "_pixtuoid": true,
         "hooks": [
           {
@@ -54,15 +47,6 @@
       }
     ],
     "PostToolUse": [
-      {
-        "hooks": [
-          {
-            "command": "ascii-agents-hook",
-            "type": "command"
-          }
-        ],
-        "matcher": ".*"
-      },
       {
         "_pixtuoid": true,
         "hooks": [
@@ -76,15 +60,6 @@
     ],
     "PreToolUse": [
       {
-        "hooks": [
-          {
-            "command": "ascii-agents-hook",
-            "type": "command"
-          }
-        ],
-        "matcher": ".*"
-      },
-      {
         "_pixtuoid": true,
         "hooks": [
           {
@@ -96,15 +71,6 @@
       }
     ],
     "SessionEnd": [
-      {
-        "hooks": [
-          {
-            "command": "ascii-agents-hook",
-            "type": "command"
-          }
-        ],
-        "matcher": ".*"
-      },
       {
         "_pixtuoid": true,
         "hooks": [
@@ -118,15 +84,6 @@
     ],
     "SessionStart": [
       {
-        "hooks": [
-          {
-            "command": "ascii-agents-hook",
-            "type": "command"
-          }
-        ],
-        "matcher": ".*"
-      },
-      {
         "_pixtuoid": true,
         "hooks": [
           {
@@ -135,9 +92,28 @@
           }
         ],
         "matcher": ".*"
+      },
+      {
+        "hooks": [
+          {
+            "type": "mcp_tool",
+            "server": "mem0-mcp",
+            "tool": "get_memories",
+            "input": {
+              "filters": {
+                "AND": [
+                  { "user_id": "ivanwng97" },
+                  { "metadata": { "scope": "global" } }
+                ]
+              }
+            },
+            "statusMessage": "Loading mem0 profile…"
+          }
+        ]
       }
     ]
   },
+  "includeCoAuthoredBy": true,
   "permissions": {
     "allow": [
       "Bash(brew *)",

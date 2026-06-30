@@ -1,8 +1,16 @@
 tap "apple/apple"
 tap "brewforge/chinese"
 tap "brewforge/extras"
+tap "charmbracelet/tap"
+tap "esengine/reasonix"
 tap "homebrew/cask"
 tap "homebrew/core"
+tap "ivanwng97/pixtuoid"
+tap "steipete/tap"
+# Static analysis and lint tool, for (ba)sh scripts
+brew "shellcheck"
+# Static checker for GitHub Actions workflow files
+brew "actionlint"
 # Text-based UI library
 brew "ncurses"
 # Aquarium animation in ASCII art
@@ -13,6 +21,10 @@ brew "openssl@3"
 brew "bat"
 # Yet another cross-platform graphical process/system monitor
 brew "bottom"
+# Next-generation test runner for Rust
+brew "cargo-nextest"
+# CLI tool for analyzing Claude Code usage from local JSONL files
+brew "ccusage"
 # Cross-platform make
 brew "cmake"
 # Get a file from an HTTP, HTTPS or FTP server
@@ -25,14 +37,16 @@ brew "docker-compose"
 brew "eza"
 # Simple, fast and user-friendly alternative to find
 brew "fd"
+# Play, record, convert, and stream select audio and video codecs
+brew "ffmpeg"
 # Command-line fuzzy finder written in Go
 brew "fzf"
-# Open-source, cross-platform JavaScript runtime environment
-brew "node"
-# Interact with Google Gemini AI models from the command-line
-brew "gemini-cli"
 # GitHub command-line tool
 brew "gh"
+# GIF image/animation creator/editor
+brew "gifsicle"
+# Highly customizable changelog generator
+brew "git-cliff"
 # Syntax-highlighting pager for git and diff output
 brew "git-delta"
 # Open source programming language to build simple/reliable/efficient software
@@ -41,6 +55,8 @@ brew "go"
 brew "helix"
 # Tools and libraries to manipulate images in select formats
 brew "imagemagick"
+# Handy way to save and run project-specific commands
+brew "just"
 # Simple terminal UI for git commands
 brew "lazygit"
 # May the code be with you
@@ -49,8 +65,20 @@ brew "leetcode-cli"
 brew "llvm"
 # Parsing Expression Grammars For Lua
 brew "lpeg"
+# Fast, async, resource-friendly link checker
+brew "lychee"
 # Mac App Store command-line interface
 brew "mas"
+# Experimental optional static type checker for Python
+brew "mypy"
+# Open-source, cross-platform JavaScript runtime environment
+brew "node"
+# Your own personal AI assistant
+brew "openclaw-cli"
+# Search tool like grep and The Silver Searcher
+brew "ripgrep"
+# AI coding agent, built for the terminal
+brew "opencode"
 # Development kit for the Java programming language
 brew "openjdk"
 # Painless compression and decompression for your terminal
@@ -59,14 +87,22 @@ brew "ouch"
 brew "pipx"
 # Package compiler and linker metadata toolkit
 brew "pkgconf"
+# Static type checker for Python
+brew "pyright"
 # Rsync for cloud storage
 brew "rclone"
-# Search tool like grep and The Silver Searcher
-brew "ripgrep"
+# CLI proxy to minimize LLM token consumption
+brew "rtk"
 # Powerful, clean, object-oriented scripting language
-brew "ruby"
-# Static analysis and lint tool, for (ba)sh scripts
-brew "shellcheck"
+brew "ruby", link: false
+# Extremely fast Python linter, written in Rust
+brew "ruff"
+# Safe, concurrent, practical language
+brew "rust"
+# Experimental Rust compiler front-end for IDEs
+brew "rust-analyzer"
+# Autoformat shell script source code
+brew "shfmt"
 # Cross-shell prompt for astronauts
 brew "starship"
 # Organize software neatly under a single directory tree (e.g. /usr/local)
@@ -81,6 +117,8 @@ brew "vivid"
 brew "wget"
 # Blazing fast terminal file manager written in Rust, based on async I/O
 brew "yazi"
+# Process YAML, JSON, XML, CSV and properties documents from the CLI
+brew "yq"
 # Pluggable terminal workspace, with terminal multiplexer as the base feature
 brew "zellij"
 # Shell extension to navigate your filesystem faster
@@ -91,10 +129,16 @@ brew "zsh-autosuggestions"
 brew "zsh-completions"
 # Fish shell like syntax highlighting for zsh
 brew "zsh-syntax-highlighting"
+# Send and read iMessage / SMS from the terminal
+brew "steipete/tap/imsg", trusted: true
 # Stand alone ad blocker
 cask "adguard"
 # Transfer files from and to an Android smartphone
 cask "android-file-transfer"
+# Agent orchestration platform
+cask "antigravity"
+# Terminal interface for Antigravity agents
+cask "antigravity-cli"
 # Cloud storage service
 cask "baidunetdisk"
 # E-books management software
@@ -105,6 +149,10 @@ cask "brewforge/chinese/clashx-meta"
 cask "claude"
 # Terminal-based AI coding assistant
 cask "claude-code@latest"
+# OpenAI's coding agent that runs in your terminal
+cask "codex"
+# Brings the power of Copilot coding agent directly to your terminal
+cask "copilot-cli"
 # All-in-one toolbox for developers
 cask "devutils"
 # Voice and text chat software
@@ -120,8 +168,6 @@ cask "ghostty@tip"
 cask "google-chrome"
 # Client for the Google Drive storage service
 cask "google-drive"
-# Native desktop AI assistant from Google
-cask "google-gemini"
 # Tool for multi-language users
 cask "input-source-pro"
 # File archiver
@@ -138,6 +184,8 @@ cask "brewforge/chinese/quarkclouddrive"
 cask "rapidapi"
 # Control your tools with a few keystrokes
 cask "raycast"
+# Cache-first DeepSeek coding agent for the terminal.
+cask "esengine/reasonix/reasonix", trusted: true
 # Team communication and collaboration software
 cask "slack"
 # Sound and audio controller
@@ -189,7 +237,6 @@ vscode "eamodio.gitlens"
 vscode "esbenp.prettier-vscode"
 vscode "foxundermoon.shell-format"
 vscode "fwcd.kotlin"
-vscode "github.copilot-chat"
 vscode "github.vscode-github-actions"
 vscode "github.vscode-pull-request-github"
 vscode "golang.go"
@@ -238,3 +285,20 @@ vscode "vscjava.vscode-maven"
 vscode "vscode-icons-team.vscode-icons"
 vscode "vscodevim.vim"
 vscode "yzhang.markdown-all-in-one"
+cargo "cargo-deny"
+cargo "cargo-edit"
+cargo "cargo-hack"
+cargo "cargo-insta"
+cargo "cargo-llvm-cov"
+cargo "cargo-machete"
+cargo "cargo-mutants"
+cargo "cargo-outdated"
+cargo "cargo-semver-checks"
+cargo "lifecycler"
+cargo "pixtuoid-hook"
+npm "codewhale"
+npm "corepack"
+npm "neovim"
+npm "pnpm"
+npm "wrangler"
+npm "yarn"

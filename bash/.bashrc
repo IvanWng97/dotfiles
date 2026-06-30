@@ -5,3 +5,4 @@
 
 
 
+. "$HOME/.cargo/env"
