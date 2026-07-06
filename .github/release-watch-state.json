@@ -9,6 +9,6 @@
   "alacritty": "v0.17.0",
   "starship": "v1.26.0",
   "fish": "4.8.0",
-  "lazygit": "v0.62.2",
-  "tmux": "3.7"
+  "lazygit": "v0.63.0",
+  "tmux": "3.7b"
 }
