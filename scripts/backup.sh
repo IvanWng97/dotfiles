@@ -4,7 +4,7 @@ set -euo pipefail
 SCRIPT_DIR="${0:A:h}"
 BACKUP_DIR="${SCRIPT_DIR:h}/Backup"
 BREWFILE="$BACKUP_DIR/Brewfile"
-PIPFILE="$BACKUP_DIR/Pipfile"
+PIPFILE="$BACKUP_DIR/requirements.txt"
 CLAUDE_SETTINGS="$BACKUP_DIR/claude-settings.json"
 
 mkdir -p "$BACKUP_DIR"

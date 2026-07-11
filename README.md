@@ -33,14 +33,14 @@ cd ~/dotfiles && make bootstrap
 | Command | What it does |
 | --- | --- |
 | `make bootstrap` | Fresh-machine setup: brew + stow + symlinks + `make install`. Idempotent. |
-| `make install` | Installs everything from `Backup/Brewfile` (brew bundle natively covers taps, formulas, casks, mas, vscode, cargo and npm) plus `Pipfile`, fisher plugins from the stowed `fish_plugins`, tpm + plugins, and seeds `~/.claude/settings.json` if absent. |
+| `make install` | Installs everything from `Backup/Brewfile` (brew bundle natively covers taps, formulas, casks, mas, vscode, cargo and npm) plus `requirements.txt`, fisher plugins from the stowed `fish_plugins`, tpm + plugins, and seeds `~/.claude/settings.json` if absent. |
 | `make install-links` | Re-run `stow` to (re)create symlinks under `$HOME`. |
 | `make uninstall-links` | Remove the symlinks (configs stay safe in `~/dotfiles/`). |
 | `make relink` | `uninstall-links` then `install-links` — useful after adding a new file to a package. |
 | `make symlinks-check` | Verify every package file has a matching, correctly-resolved symlink in `$HOME`; reports orphans too. Exits non-zero on issues. |
 | `make doctor` | Run every health check at once: zsh syntax on each script, symlinks-check, Brewfile parses, git working tree clean. |
 | `make update` | Upgrades brew/npm/pipx/cargo/mas/tmux packages and re-dumps `Backup/Brewfile` so it matches reality. |
-| `make backup` | Re-dumps `Backup/Brewfile` + `Pipfile` and snapshots `~/.claude/settings.json` into `Backup/` for committing. |
+| `make backup` | Re-dumps `Backup/Brewfile` + `requirements.txt` and snapshots `~/.claude/settings.json` into `Backup/` for committing. |
 
 All six scripts (`bootstrap`, `install`, `update`, `backup`, `check-links`, `doctor`) live in [`scripts/`](scripts) and share a small set of helpers (strict mode, colored output, per-tool guards) — `update.sh` deliberately skips `-e` so one failing updater doesn't abort the rest.
 
