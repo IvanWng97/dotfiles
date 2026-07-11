@@ -43,6 +43,20 @@ jobs:
       - name: brew update (refresh catalog)
         run: brew update --quiet
 
+      - name: Trust Brewfile taps
+        run: |
+          set -e
+          # The runner pre-taps aws/tap and hashicorp/tap. Under the
+          # runner's HOMEBREW_REQUIRE_TAP_TRUST their formulas shadow
+          # Brewfile cask names (e.g. `copilot-cli` resolves to the
+          # untrusted aws/tap/copilot-cli formula instead of the
+          # homebrew/cask app) and abort the whole install. Drop them.
+          brew untap aws/tap hashicorp/tap 2>/dev/null || true
+          # Trust every third-party tap the Brewfile references so
+          # tap-trust enforcement doesn't refuse their entries.
+          grep '^tap "' Backup/Brewfile | cut -d'"' -f2 | grep -v '^homebrew/' |
+            xargs -n1 brew trust --tap
+
       - name: brew bundle install
         run: |
           set -e
