@@ -7,7 +7,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License"></a>
 </p>
 
-💻 ghostty, neovim, zsh, tmux, starship, lazygit, homebrew — my whole world
+💻 ghostty, zsh, fish, tmux, starship, helix, lazygit, homebrew — my whole world
 <div align="center">
 <img width="720" alt="IMG_1059" src="https://user-images.githubusercontent.com/39482599/222035732-e245becc-dd67-4d42-8c8c-28a2592d4d13.png">
 </div>
@@ -33,16 +33,16 @@ cd ~/dotfiles && make bootstrap
 | Command | What it does |
 | --- | --- |
 | `make bootstrap` | Fresh-machine setup: brew + stow + symlinks + `make install`. Idempotent. |
-| `make install` | Installs everything from `Backup/Brewfile`, `Npmfile`, `Pipfile`, `Cargofile`, `Fishfile`, plus tpm + plugins. |
+| `make install` | Installs everything from `Backup/Brewfile` (brew bundle natively covers taps, formulas, casks, mas, vscode, cargo and npm) plus `Pipfile`, fisher plugins from the stowed `fish_plugins`, tpm + plugins, and seeds `~/.claude/settings.json` if absent. |
 | `make install-links` | Re-run `stow` to (re)create symlinks under `$HOME`. |
 | `make uninstall-links` | Remove the symlinks (configs stay safe in `~/dotfiles/`). |
 | `make relink` | `uninstall-links` then `install-links` — useful after adding a new file to a package. |
 | `make symlinks-check` | Verify every package file has a matching, correctly-resolved symlink in `$HOME`; reports orphans too. Exits non-zero on issues. |
 | `make doctor` | Run every health check at once: zsh syntax on each script, symlinks-check, Brewfile parses, git working tree clean. |
 | `make update` | Upgrades brew/npm/pipx/cargo/mas/tmux packages and re-dumps `Backup/Brewfile` so it matches reality. |
-| `make backup` | Re-dumps every package list into `Backup/` for committing. |
+| `make backup` | Re-dumps `Backup/Brewfile` + `Pipfile` and snapshots `~/.claude/settings.json` into `Backup/` for committing. |
 
-All five scripts (`bootstrap`, `install`, `update`, `backup`, `check-links`) live in [`scripts/`](scripts) and share a small set of helpers (`set -euo pipefail`, colored output, per-tool guards).
+All six scripts (`bootstrap`, `install`, `update`, `backup`, `check-links`, `doctor`) live in [`scripts/`](scripts) and share a small set of helpers (strict mode, colored output, per-tool guards) — `update.sh` deliberately skips `-e` so one failing updater doesn't abort the rest.
 
 ### Stow packages
 
@@ -52,15 +52,17 @@ Each tool gets its own top-level package. All packages stow into `$HOME`; each o
 ~/dotfiles/
   alacritty/.config/alacritty/...
   fish/.config/fish/...
-  nvim/.config/nvim/...
+  helix/.config/helix/...
   ...                              ← 13 XDG packages
   aria2/.aria2/aria2.conf
-  claude/.claude/settings.json
+  claude/.claude/CLAUDE.md  claude/.claude/RTK.md
   bash/.bashrc
   czrc/.czrc
   vim/.vimrc  vim/.ideavimrc
   zsh/.zshrc
 ```
+
+`~/.claude/settings.json` is the one config that is **not** stowed: Claude Code rewrites it in place, which would silently replace the symlink with a real file. Instead `make backup` snapshots it to `Backup/claude-settings.json` and `make install` seeds it on a fresh machine.
 
 The Makefile auto-discovers packages (every top-level dir except `scripts/`, `Backup/`, `.github/`, `.git/`) and runs a single `stow -v -t ~ <packages...>` call. Run `make print-packages` to see the current list.
 
@@ -85,12 +87,7 @@ pre-commit install
 
 ### Editors
 
-|                         | Vim        | Neovim                    |
-| ----------------------- | ---------- | ------------------------- |
-| Main Configuration File | `~/.vimrc` | `~/.config/nvim/init.lua` |
-| Configuration directory | `~/.vim`   | `~/.config/nvim`          |
-
-[Helix](helix/.config/helix/config.toml) is also set up for quick edits.
+[Helix](helix/.config/helix/config.toml) for quick edits; classic [Vim](vim/.vimrc) config plus [`.ideavimrc`](vim/.ideavimrc) for JetBrains IDEs.
 
 ### Multiplexer
 
