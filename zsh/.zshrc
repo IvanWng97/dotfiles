@@ -7,16 +7,12 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 ### vivid settings
 export LS_COLORS="$(vivid generate dracula)"
 
-### zsh settings
-source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-bindkey '`' autosuggest-accept
-  if type brew &>/dev/null; then
-    FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
-
-    autoload -Uz compinit
-    compinit
-  fi
+### zsh completion settings
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+fi
+autoload -Uz compinit
+compinit
 
 ### zoxide settings
 eval "$(zoxide init zsh)"
@@ -72,3 +68,9 @@ export ANDROID_AVD_HOME="$HOME/.android/avd"
 
 ### CLAUDE settings
 export ENABLE_LSP_TOOL=1
+
+### zsh plugin settings — keep at the end of .zshrc;
+### syntax-highlighting must be sourced last to wrap every widget defined above
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+bindkey '`' autosuggest-accept
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
