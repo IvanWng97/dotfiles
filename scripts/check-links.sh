@@ -34,6 +34,8 @@ not_symlink=()
 wrong_target=()
 broken=()
 
+# git ls-files (not find) so gitignored machine-local cruft inside a
+# package dir doesn't get demanded a symlink.
 info "Checking ${#STOW_PACKAGES} packages for healthy symlinks under \$HOME"
 for pkg in "${STOW_PACKAGES[@]}"; do
 	[[ -d $pkg ]] || { warn "package dir missing: $pkg"; continue; }
@@ -59,7 +61,7 @@ for pkg in "${STOW_PACKAGES[@]}"; do
 		else
 			(( ++ok_count ))
 		fi
-	done < <(find "$pkg" -type f -not -name '.DS_Store' -print0)
+	done < <(git ls-files -z -- "$pkg")
 done
 
 info "Looking for orphan symlinks under \$HOME (point into dotfiles/, target gone)"

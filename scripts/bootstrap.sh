@@ -81,7 +81,7 @@ for pkg in "${STOW_PACKAGES[@]}"; do
 			conflicts+=("$target")
 			conflict_rels+=("$rel")
 		fi
-	done < <(find "$pkg" -type f -not -name '.DS_Store' -print0)
+	done < <(git ls-files -z -- "$pkg")
 done
 
 if (( ${#conflicts} > 0 )); then
