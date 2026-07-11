@@ -1,0 +1,218 @@
+{
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(brew *)",
+      "Bash(git *)",
+      "Bash(make *)",
+      "Bash(shellcheck *)",
+      "Bash(actionlint *)",
+      "Bash(stow *)",
+      "Bash(pip3 *)",
+      "Bash(pipx *)",
+      "Bash(uv tool *)",
+      "Bash(command -v *)",
+      "Bash(bash -n *)",
+      "Bash(zsh -n *)",
+      "Bash(gh pr *)",
+      "Bash(gh run *)",
+      "Bash(gh repo *)",
+      "Bash(gh issue *)",
+      "Read(//opt/homebrew/**)",
+      "Read(//usr/local/bin/**)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)"
+    ],
+    "deny": [
+      "Bash(rm -rf /*)",
+      "Bash(rm -rf ~*)",
+      "Bash(git push --force*)",
+      "Bash(git push -f *)",
+      "Bash(git reset --hard*)",
+      "Bash(sudo *)",
+      "Bash(curl * | sh)",
+      "Bash(curl * | bash)",
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/credentials)",
+      "Read(**/.env)",
+      "Read(**/.env.local)"
+    ],
+    "defaultMode": "acceptEdits"
+  },
+  "model": "claude-fable-5[1m]",
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": ".*",
+        "_pixtuoid": true,
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pixtuoid-hook"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": ".*",
+        "_pixtuoid": true,
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pixtuoid-hook"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "rtk hook claude"
+          }
+        ]
+      },
+      {
+        "matcher": ".*",
+        "_pixtuoid": true,
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pixtuoid-hook"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": ".*",
+        "_pixtuoid": true,
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pixtuoid-hook"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": ".*",
+        "_pixtuoid": true,
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pixtuoid-hook"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "mcp_tool",
+            "server": "mem0-mcp",
+            "tool": "get_memories",
+            "input": {
+              "filters": {
+                "AND": [
+                  {
+                    "user_id": "ivanwng97"
+                  },
+                  {
+                    "metadata": {
+                      "scope": "global"
+                    }
+                  }
+                ]
+              }
+            },
+            "statusMessage": "Loading mem0 profile…"
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "matcher": ".*",
+        "_pixtuoid": true,
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pixtuoid-hook"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": ".*",
+        "_pixtuoid": true,
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pixtuoid-hook"
+          }
+        ]
+      }
+    ]
+  },
+  "enableWorkflows": true,
+  "statusLine": {
+    "type": "command",
+    "command": "bash -c 'cols=$(stty size </dev/tty 2>/dev/null | awk '\"'\"'{print $2}'\"'\"'); export COLUMNS=$(( ${cols:-120} > 4 ? ${cols:-120} - 4 : 1 )); plugin_dir=$(ls -d \"${CLAUDE_CONFIG_DIR:-$HOME/.claude}\"/plugins/cache/*/claude-hud/*/ 2>/dev/null | awk -F/ '\"'\"'{ print $(NF-1) \"\\t\" $(0) }'\"'\"' | grep -E '\"'\"'^[0-9]+\\.[0-9]+\\.[0-9]+[[:space:]]'\"'\"' | sort -t. -k1,1n -k2,2n -k3,3n -k4,4n | tail -1 | cut -f2-); exec node \"${plugin_dir}dist/index.js\"'"
+  },
+  "enabledPlugins": {
+    "andrej-karpathy-skills@karpathy-skills": true,
+    "claude-hud@claude-hud": true,
+    "claude-md-management@claude-plugins-official": true,
+    "code-review@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "feature-dev@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
+    "github@claude-plugins-official": true,
+    "kotlin-lsp@claude-plugins-official": true,
+    "pr-review-toolkit@claude-plugins-official": true,
+    "publishing-astro-websites@publishing-astro-websites-agentic-skill": true,
+    "pyright-lsp@claude-plugins-official": true,
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "rust-skills@rust-skills": true,
+    "superpowers@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "claude-hud": {
+      "source": {
+        "source": "github",
+        "repo": "jarrodwatts/claude-hud"
+      }
+    },
+    "karpathy-skills": {
+      "source": {
+        "source": "github",
+        "repo": "forrestchang/andrej-karpathy-skills"
+      }
+    },
+    "publishing-astro-websites-agentic-skill": {
+      "source": {
+        "source": "github",
+        "repo": "SpillwaveSolutions/publishing-astro-websites-agentic-skill"
+      }
+    },
+    "rust-skills": {
+      "source": {
+        "source": "github",
+        "repo": "actionbook/rust-skills"
+      }
+    }
+  },
+  "effortLevel": "xhigh",
+  "tui": "fullscreen",
+  "skipWorkflowUsageWarning": true,
+  "agentPushNotifEnabled": true,
+  "$schema": "https://json.schemastore.org/claude-code-settings.json"
+}
