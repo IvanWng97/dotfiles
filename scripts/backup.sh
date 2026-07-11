@@ -4,34 +4,23 @@ set -euo pipefail
 SCRIPT_DIR="${0:A:h}"
 BACKUP_DIR="${SCRIPT_DIR:h}/Backup"
 BREWFILE="$BACKUP_DIR/Brewfile"
-CARGOFILE="$BACKUP_DIR/Cargofile"
-FISHFILE="$BACKUP_DIR/Fishfile"
-NPMFILE="$BACKUP_DIR/Npmfile"
 PIPFILE="$BACKUP_DIR/Pipfile"
+CLAUDE_SETTINGS="$BACKUP_DIR/claude-settings.json"
 
 mkdir -p "$BACKUP_DIR"
 
-echo "---------------------------------"
-echo "- Deleting old Backup Files     -"
-echo "---------------------------------"
-rm -f "$BREWFILE" "$CARGOFILE" "$FISHFILE" "$NPMFILE" "$PIPFILE"
+# Every dump overwrites its manifest in place; a missing tool leaves the
+# committed file untouched instead of deleting it.
 
 echo "---------------------------------"
-echo "- Dumping BREW and MAS packages -"
+echo "- Dumping BREW bundle           -"
 echo "---------------------------------"
+# Covers taps, formulas, casks, mas, vscode extensions, cargo and npm
+# packages in one manifest.
 if command -v brew >/dev/null 2>&1; then
-	brew bundle dump --describe --file="$BREWFILE"
+	brew bundle dump --force --file="$BREWFILE"
 else
 	echo "skip: brew not installed"
-fi
-
-echo "---------------------------------"
-echo "- Dumping NPM packages          -"
-echo "---------------------------------"
-if command -v npm >/dev/null 2>&1; then
-	npm list --global --parseable --depth=0 | sed '1d' | awk '{gsub(/\/.*\//,"",$1); print}' >"$NPMFILE"
-else
-	echo "skip: npm not installed"
 fi
 
 echo "---------------------------------"
@@ -44,19 +33,12 @@ else
 fi
 
 echo "---------------------------------"
-echo "- Dumping CARGO packages        -"
+echo "- Syncing Claude settings       -"
 echo "---------------------------------"
-if command -v cargo >/dev/null 2>&1; then
-	cargo install --list | grep -E '^[a-z0-9_-]+ v[0-9.]+:$' | cut -f1 -d' ' >"$CARGOFILE"
+# ~/.claude/settings.json is not stowed (Claude Code rewrites it in
+# place); snapshot the live file into Backup/ for committing.
+if [ -f "$HOME/.claude/settings.json" ]; then
+	cp "$HOME/.claude/settings.json" "$CLAUDE_SETTINGS"
 else
-	echo "skip: cargo not installed"
-fi
-
-echo "---------------------------------"
-echo "- Dumping FISH packages         -"
-echo "---------------------------------"
-if [ -f ~/.config/fish/fish_plugins ]; then
-	cp ~/.config/fish/fish_plugins "$FISHFILE"
-else
-	echo "skip: ~/.config/fish/fish_plugins missing"
+	echo "skip: ~/.claude/settings.json missing"
 fi

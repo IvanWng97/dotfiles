@@ -1,2 +1,12 @@
-setuptools==82.0.1
+annotated-types==0.7.0
+certifi==2026.6.17
+cffi==2.1.0
+cryptography==49.0.0
+pillow==12.2.0
+pycparser==3.0
+pydantic==2.13.4
+pydantic_core==2.46.4
+setuptools==83.0.0
+typing-inspection==0.4.2
+typing_extensions==4.15.0
 wheel==0.47.0

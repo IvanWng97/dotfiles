@@ -1,12 +1,12 @@
-tap "apple/apple"
-tap "brewforge/chinese"
-tap "brewforge/extras"
-tap "charmbracelet/tap"
-tap "esengine/reasonix"
+tap "apple/apple", trusted: true
+tap "brewforge/chinese", trusted: true
+tap "brewforge/extras", trusted: true
+tap "charmbracelet/tap", trusted: true
+tap "esengine/reasonix", trusted: true
 tap "homebrew/cask"
 tap "homebrew/core"
-tap "ivanwng97/pixtuoid"
-tap "steipete/tap"
+tap "ivanwng97/pixtuoid", trusted: true
+tap "steipete/tap", trusted: true
 # Static analysis and lint tool, for (ba)sh scripts
 brew "shellcheck"
 # Static checker for GitHub Actions workflow files
@@ -19,6 +19,8 @@ brew "asciiquarium"
 brew "openssl@3"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
+# Compiler infrastructure and toolchain library for WebAssembly
+brew "binaryen"
 # Yet another cross-platform graphical process/system monitor
 brew "bottom"
 # Next-generation test runner for Rust
@@ -39,6 +41,10 @@ brew "eza"
 brew "fd"
 # Play, record, convert, and stream select audio and video codecs
 brew "ffmpeg"
+# User-friendly command-line shell for UNIX-like operating systems
+brew "fish"
+# Plugin manager for the Fish shell
+brew "fisher"
 # Command-line fuzzy finder written in Go
 brew "fzf"
 # GitHub command-line tool
@@ -53,6 +59,8 @@ brew "git-delta"
 brew "go"
 # Post-modern modal text editor
 brew "helix"
+# Self-improving AI agent that creates skills from experience
+brew "hermes-agent"
 # Tools and libraries to manipulate images in select formats
 brew "imagemagick"
 # Handy way to save and run project-specific commands
@@ -129,6 +137,10 @@ brew "zsh-autosuggestions"
 brew "zsh-completions"
 # Fish shell like syntax highlighting for zsh
 brew "zsh-syntax-highlighting"
+# A tool for recording terminal GIFs
+brew "charmbracelet/tap/vhs"
+# Terminal pixel-art office for AI coding agents
+brew "ivanwng97/pixtuoid/pixtuoid", trusted: true
 # Send and read iMessage / SMS from the terminal
 brew "steipete/tap/imsg", trusted: true
 # Stand alone ad blocker
@@ -161,6 +173,7 @@ cask "discord"
 cask "downie"
 # Download manager with a torrent client
 cask "folx"
+cask "font-jetbrains-mono"
 cask "font-jetbrains-mono-nerd-font"
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty@tip"
@@ -216,8 +229,8 @@ mas "Infuse", id: 0
 mas "Keynote", id: 409183694
 mas "LINE", id: 539883307
 mas "Noir", id: 1592917505
-mas "Numbers", id: 409203825
 mas "Numbers", id: 361304891
+mas "Numbers", id: 409203825
 mas "Pages", id: 409201541
 mas "Pixelmator Pro", id: 1289583905
 mas "Rakuten Cash Back", id: 1451893560
@@ -296,6 +309,7 @@ cargo "cargo-outdated"
 cargo "cargo-semver-checks"
 cargo "lifecycler"
 cargo "pixtuoid-hook"
+cargo "wasm-bindgen-cli"
 npm "codewhale"
 npm "corepack"
 npm "neovim"

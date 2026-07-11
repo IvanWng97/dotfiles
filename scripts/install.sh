@@ -4,27 +4,18 @@ set -euo pipefail
 SCRIPT_DIR="${0:A:h}"
 BACKUP_DIR="${SCRIPT_DIR:h}/Backup"
 BREWFILE="$BACKUP_DIR/Brewfile"
-CARGOFILE="$BACKUP_DIR/Cargofile"
-FISHFILE="$BACKUP_DIR/Fishfile"
-NPMFILE="$BACKUP_DIR/Npmfile"
 PIPFILE="$BACKUP_DIR/Pipfile"
+CLAUDE_SETTINGS="$BACKUP_DIR/claude-settings.json"
 
 echo "------------------------------------"
-echo "- Installing BREW and MAS packages -"
+echo "- Installing BREW bundle           -"
 echo "------------------------------------"
+# brew bundle natively covers taps, formulas, casks, mas, vscode
+# extensions, cargo and npm packages — one manifest for all of them.
 if command -v brew >/dev/null 2>&1 && [ -f "$BREWFILE" ]; then
 	brew bundle install --file="$BREWFILE"
 else
 	echo "skip: brew not installed or $BREWFILE missing"
-fi
-
-echo "------------------------------------"
-echo "- Installing NPM packages          -"
-echo "------------------------------------"
-if command -v npm >/dev/null 2>&1 && [ -s "$NPMFILE" ]; then
-	xargs npm install --location=global <"$NPMFILE"
-else
-	echo "skip: npm not installed or $NPMFILE empty"
 fi
 
 echo "------------------------------------"
@@ -37,25 +28,14 @@ else
 fi
 
 echo "------------------------------------"
-echo "- Installing CARGO packages        -"
+echo "- Installing FISH plugins          -"
 echo "------------------------------------"
-if command -v cargo >/dev/null 2>&1 && [ -s "$CARGOFILE" ]; then
-	xargs cargo install <"$CARGOFILE"
+# fisher comes from the Brewfile and reads the stowed
+# ~/.config/fish/fish_plugins; `fisher update` installs everything in it.
+if command -v fish >/dev/null 2>&1 && [ -f "$HOME/.config/fish/fish_plugins" ]; then
+	fish -c "fisher update"
 else
-	echo "skip: cargo not installed or $CARGOFILE empty"
-fi
-
-echo "------------------------------------"
-echo "- Installing FISH packages         -"
-echo "------------------------------------"
-if command -v fish >/dev/null 2>&1 && [ -f "$FISHFILE" ]; then
-	while IFS= read -r plugin; do
-		[ -z "$plugin" ] && continue
-		echo "$plugin"
-		fish -c "fisher install $plugin"
-	done <"$FISHFILE"
-else
-	echo "skip: fish not installed or $FISHFILE missing"
+	echo "skip: fish not installed or fish_plugins not stowed"
 fi
 
 echo "------------------------------------"
@@ -66,3 +46,17 @@ if [ ! -d "$TPM_DIR" ]; then
 	git clone https://github.com/tmux-plugins/tpm "$TPM_DIR"
 fi
 "$TPM_DIR/bin/install_plugins"
+
+echo "------------------------------------"
+echo "- Restoring Claude settings        -"
+echo "------------------------------------"
+# ~/.claude/settings.json is deliberately NOT stowed — Claude Code
+# rewrites it in place, which replaces a symlink with a real file.
+# Seed it from the backup only when absent; never clobber a live one.
+if [ ! -f "$HOME/.claude/settings.json" ] && [ -f "$CLAUDE_SETTINGS" ]; then
+	mkdir -p "$HOME/.claude"
+	cp "$CLAUDE_SETTINGS" "$HOME/.claude/settings.json"
+	echo "seeded ~/.claude/settings.json from Backup/"
+else
+	echo "skip: ~/.claude/settings.json already present"
+fi

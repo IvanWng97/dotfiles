@@ -1,4 +1,7 @@
 #!/usr/bin/env zsh
+# No -e on purpose: each updater is tracked and failures are summarized
+# at the end instead of aborting the remaining ones.
+set -uo pipefail
 
 readonly SCRIPT_DIR="${0:A:h}"
 readonly REPO_DIR="${SCRIPT_DIR:h}"
@@ -103,7 +106,7 @@ fi
 
 if command -v brew >/dev/null 2>&1; then
     println "Refreshing Brewfile"
-    track "Brewfile" brew bundle dump --describe --force --file="$BREWFILE"
+    track "Brewfile" brew bundle dump --force --file="$BREWFILE"
 fi
 
 printf '\n%s%s==> Summary%s\n' "$BLUE" "$BOLD" "$CLEAR"

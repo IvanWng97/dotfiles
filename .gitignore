@@ -2,6 +2,9 @@
 *.swp
 *~
 
+# brew bundle install rewrites the lockfile locally — pure churn
+Backup/Brewfile.lock.json
+
 # Claude Code: machine-local state and runtime cruft
 claude/.claude/settings.local.json
 claude/.claude/settings.json.*.bak
