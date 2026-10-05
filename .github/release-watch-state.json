@@ -1,6 +1,6 @@
 {
   "lf": "r42",
-  "kitty": "v0.49.1",
+  "kitty": "v0.49.2",
   "helix": "25.07.1",
   "xplr": "v1.1.2",
   "ghostty": "v1.3.1",
@@ -9,6 +9,6 @@
   "alacritty": "v0.17.0",
   "starship": "v1.26.0",
   "fish": "4.9.3",
-  "lazygit": "v0.65.1",
+  "lazygit": "v0.66.0",
   "tmux": "3.7c"
 }
