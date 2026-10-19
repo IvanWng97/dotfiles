@@ -7,8 +7,8 @@
   "zellij": "v0.45.1",
   "tealdeer": "v1.9.0",
   "alacritty": "v0.17.0",
-  "starship": "v1.26.0",
+  "starship": "v1.27.0",
   "fish": "4.9.3",
-  "lazygit": "v0.66.1",
+  "lazygit": "v0.66.2",
   "tmux": "3.8"
 }
